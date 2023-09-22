@@ -7,8 +7,13 @@
 
 <main class="bg-fondo vh-100 p-3 container overflow-auto ">
     <div class="container overflow-hidden">
-        <div class="row gap-1 justify-content-between">
+        <div class="row gap-1 justify-content-between text-center">
+            <div class="botonera">
+                <button type="button" class=" btn btn-light text-uppercase gris-claro fw-bold shadow-sm ">Disponibles: <span class="text-success fw-bold">@habitacionesDisponibles</span></button>
+                <button type="button" class=" btn btn-light fw-bold gris-claro text-uppercase shadow-sm ">Ocupadas: <span class="text-danger fw-bold">@habitacionesNoDisponibles</span></button>
+                <button type="button" class=" btn btn-light gris-claro fw-bold text-uppercase shadow-sm ">Reparacion: <span class="reparacion fw-bold">@habitacionesEnMantenimiento</span></button>
 
+            </div>
  
         @if (Error)
         {
@@ -38,6 +43,10 @@
                             <p class="fw-bold gris-claro m-0 py-4 "></p>
                             <button class="btn btn-secondary p-1 text-uppercase fw-bold font-xs">Ver habitacion</button>
                         </div>
+                                <div class="px-2 pb-2 text-center">
+                                    <p class="fw-bold gris-claro m-0 py-4 "></p>
+                                    <button class="btn btn-secondary p-1 text-uppercase fw-bold font-xs">Modificar habitacion</button>
+                                </div>
                     </div>
                 </div>
             }
@@ -59,6 +68,7 @@
     {
         await base.OnInitializedAsync();
         await Leer();
+        OnInitialized();
     }
     private async Task Leer()
     {
@@ -81,12 +91,42 @@
         {
             case "disponible":
                 return "green"; // Cambia el color verde para el estado "activo"
-            case "no disponible":
+            case "ocupada":
                 return "red"; // Cambia el color rojo para el estado "inactivo"
-            case "mantenimiento":
-                return "gray"; // Color predeterminado para otros estados
+            case "reparacion":
+                return "violet"; // Color predeterminado para otros estados
             default:
                 return "black";
         }
     }
+    int habitacionesDisponibles;
+    int habitacionesNoDisponibles;
+    int habitacionesEnMantenimiento;
+
+    private void OnInitialized()
+    {
+        habitacionesDisponibles = 0;
+        habitacionesNoDisponibles = 0;
+        habitacionesEnMantenimiento = 0;
+
+        foreach (var habitacion in habitaciones)
+        {
+            if (habitacion.Estado== "disponible")
+            {
+                habitacionesDisponibles++;
+            }
+            else if (habitacion.Estado == "ocupada")
+            {
+                habitacionesNoDisponibles++;
+            }
+            else if (habitacion.Estado == "reparacion")
+            {
+                habitacionesEnMantenimiento++;
+            }
+        }
+    }
 }
+
+
+
+
