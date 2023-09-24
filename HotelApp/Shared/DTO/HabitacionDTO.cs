@@ -11,7 +11,7 @@ namespace HotelApp.Shared.DTO
 	{
 		public string? Nhab { get; set; }
 
-		public int? Camas { get; set; }
+		public int Camas { get; set; }
 		public string? Estado { get; set; }
 
 

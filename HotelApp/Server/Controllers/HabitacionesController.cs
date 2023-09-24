@@ -30,16 +30,16 @@ namespace HotelApp.Server.Controllers
         }
 
         [HttpGet("int:Id")]
-        public async Task<ActionResult<Habitacion>> GetNroHabitacion(string nrohab)
+        public async Task<ActionResult<Habitacion>> Get(int nrohab)
         {
-            var buscar = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab==nrohab);
+            var buscar = await context.Habitaciones.FirstOrDefaultAsync(c => c.Id==nrohab);
 
             if (buscar is null)
             {
                 return BadRequest($"No se encontro la habitacion de numero: {nrohab}");
             }
 
-            return buscar;
+            return await context.Habitaciones.FirstOrDefaultAsync(x => x.Id == nrohab);
         }
 
         [HttpPost] 
@@ -57,7 +57,7 @@ namespace HotelApp.Server.Controllers
                 var mdHabitacion = new Habitacion
                 {
                     Nhab = habitacionDTO.Nhab,
-                    Camas = (int)habitacionDTO.Camas,
+                    Camas = habitacionDTO.Camas,
                     Estado = habitacionDTO.Estado,
                    
                 };

@@ -43,10 +43,10 @@
                             <p class="fw-bold gris-claro m-0 py-4 "></p>
                             <button class="btn btn-secondary p-1 text-uppercase fw-bold font-xs">Ver habitacion</button>
                         </div>
-                                <div class="px-2 pb-2 text-center">
-                                    <p class="fw-bold gris-claro m-0 py-4 "></p>
-                                    <button class="btn btn-secondary p-1 text-uppercase fw-bold font-xs">Modificar habitacion</button>
-                                </div>
+                                <a class="btn btn-primary  text-center"
+                                   href="editar/@item.Id">
+                                    <i>Editar</i>
+                                </a>
                     </div>
                 </div>
             }
@@ -58,12 +58,13 @@
 </main>
 
 @code {
+  
 
     List<Habitacion> habitaciones;
 
     string Mensaje = "";
     bool Error;
-
+   
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
