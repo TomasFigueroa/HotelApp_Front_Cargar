@@ -1,0 +1,38 @@
+﻿@page "/crear/reserva"
+@inject IHTTPServicio http
+@inject NavigationManager navigationManager
+
+
+<FormReserva res="reserva" onValidSubbmit="Grabar" onCancel="Cancelar" />
+
+@code {
+    private Reserva reserva = new Reserva();
+     
+    private async Task Grabar()
+    {
+        ReservaDTO reservaDTO = new()
+        {
+                Dni = reserva.Dni,
+                Fecha_fin = reserva.Fecha_fin,
+                Fecha_inicio = reserva.Fecha_inicio
+              
+             
+             
+         };
+
+        var HTTPRespueta = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
+
+        if (HTTPRespueta.Error)
+        {
+            var body = HTTPRespueta.HttpResponseMessage;
+        }
+
+        navigationManager.NavigateTo("/personas");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/");
+    }
+
+}

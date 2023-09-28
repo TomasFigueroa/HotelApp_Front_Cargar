@@ -77,7 +77,8 @@ namespace HotelApp.Server.Controllers
                     {
                         mdReserva.Habitaciones.Add(habitacion);
                         mdReserva.nhabs += habs.ToString() + " , ";
-                    } else { responseApi.EsCorrecto = false; responseApi.Mensaje += "fallo en la habitacion nro: " + habs; }
+                    }
+                    else { responseApi.EsCorrecto = false; responseApi.Mensaje += "fallo en la habitacion nro: " + habs; }
                 }
                 context.Reservas.Add(mdReserva);
                 await context.SaveChangesAsync();
@@ -121,14 +122,14 @@ namespace HotelApp.Server.Controllers
                     }
                     foreach (var habs in reservaDTO.Nhabs)
                     {
-                        var habitacion = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab == habs);
-                        if (habitacion != null)
-                        {
-                            dbReserva.Habitaciones.Add(habitacion);
-                            dbReserva.nhabs += habs.ToString() + " , ";
+                            var habitacion = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab == habs);
+                            if (habitacion != null)
+                            {
+                                dbReserva.Habitaciones.Add(habitacion);
+                                dbReserva.nhabs += habs.ToString() + " , ";
+                            }
+                            else { responseApi.EsCorrecto = false; responseApi.Mensaje += "fallo en la habitacion nro: " + habs; }
                         }
-                        else { responseApi.EsCorrecto = false; responseApi.Mensaje += "fallo en la habitacion nro: " + habs; }
-                    }
                     context.Reservas.Update(dbReserva);
                     await context.SaveChangesAsync();
                     responseApi.EsCorrecto = true;

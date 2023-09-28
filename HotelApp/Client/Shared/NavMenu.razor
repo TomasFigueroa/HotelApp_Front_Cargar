@@ -5,8 +5,8 @@
 
 
 <div class="@NavMenuCssClass nav-scrollable " @onclick="ToggleNavMenu">
-<div class="d-flex flex-column">
-    <div class="mb-2">
+<div class="d-flex  flex-column">
+    @*<div class="mb-2">
         <label class="d-block text-white fw-bold">Desde:</label>
         <input type="number"
                placeholder="ej: 110"
@@ -17,10 +17,14 @@
         <input type="number"
                placeholder="ej: 210"
                class="rounded  w-100 border-0 py-2 mt-1 text-center gris-claro fw-bold" />
-    </div>
+    </div>*@
    <div class="mt-3">
-        <button type="button" class="w-100 btn btn-success text-uppercase gris-claro fw-bold shadow-sm " @onclick="NavegarAOtraPagina">+ Habitacion</button>
+        <button type="button" class="w-100 btn btn-dark text-uppercase gris-claro fw-bold shadow-sm " @onclick="NavegarAOtraPagina">Habitaciones</button>
     </div>
+
+        <div class="mt-3">
+            <button type="button" class="w-100 btn btn-dark text-uppercase gris-claro fw-bold shadow-sm " @onclick="NavegarAOtraPagina2">Reservas</button>
+        </div>
 </div>
 </div>
 <div class="@NavMenuCssClass nav-scrollable fondo2" @onclick="ToggleNavMenu">
@@ -38,7 +42,12 @@
 
     private void NavegarAOtraPagina()
     {
-        NavigationManager.NavigateTo("/crear"); // Ruta a la otra página
+        NavigationManager.NavigateTo("/"); // Ruta a la otra página
+
+    }
+    private void NavegarAOtraPagina2()
+    {
+        NavigationManager.NavigateTo("/reserva"); // Ruta a la otra página
 
     }
     bool Error;

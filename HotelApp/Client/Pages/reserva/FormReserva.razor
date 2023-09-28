@@ -1,0 +1,64 @@
+﻿<EditForm Model="res" OnValidSubmit="onValidSubbmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>DNI</label>
+        <div>
+
+            <InputNumber class="form-control" @bind-Value="@res.Dni" />
+            <ValidationMessage For="@(() => res.Dni)" />
+        </div>
+    </div>
+
+   @* <div class="form-group">
+        <label>Dni huesped</label>
+        <div>
+
+            <InputText class="form-control" @bind-Value="@res.DniHuesped" />
+            <ValidationMessage For="@(() => res.DniHuesped)" />
+        </div>
+    </div>
+*@
+    <div class="form-group">
+        <label>Fecha inicio</label>
+        <div>
+            <InputDate class="form-control" @bind-Value="@res.Fecha_inicio" />
+            <ValidationMessage For="@(() => res.Fecha_inicio)" />
+        </div>
+    </div>
+
+    <div class="form-group ">
+        <label>Fecha Fin</label>
+        <div>
+            <InputDate class="form-control" @bind-Value="@res.Fecha_fin" />
+            <ValidationMessage For="@(() => res.Fecha_fin)" />
+        </div>
+    </div>
+
+   @* <div class="form-group ">
+        <label>Numero de habitacion</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@res.nhabs" />
+            <ValidationMessage For="@(() => res.nhabs)" />
+        </div>
+    </div>*@
+
+   
+
+
+
+
+    <br />
+    <button class="btn btn-primary" type="submit">Aceptar</button>
+    <button class="btn btn-secondary" @onclick="onCancel">Cancelar</button>
+</EditForm>
+
+
+
+@code {
+
+    [Parameter] public Reserva res { get; set; } = new Reserva();
+    [Parameter] public EventCallback onValidSubbmit { get; set; }
+    [Parameter] public EventCallback onCancel { get; set; }
+
+
+}

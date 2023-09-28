@@ -29,17 +29,17 @@ namespace HotelApp.Server.Controllers
             return habitaciones;
         }
 
-        [HttpGet("int:Id")]
-        public async Task<ActionResult<Habitacion>> Get(int nrohab)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Habitacion>> Get(int id)
         {
-            var buscar = await context.Habitaciones.FirstOrDefaultAsync(c => c.Id==nrohab);
+            var buscar = await context.Habitaciones.AnyAsync(c => c.Id==id);
 
-            if (buscar is null)
+            if (!buscar)
             {
-                return BadRequest($"No se encontro la habitacion de numero: {nrohab}");
+                return BadRequest($"No se encontro la habitacion de numero: {id}");
             }
 
-            return await context.Habitaciones.FirstOrDefaultAsync(x => x.Id == nrohab);
+            return await context.Habitaciones.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         [HttpPost] 
@@ -68,14 +68,15 @@ namespace HotelApp.Server.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
 
-        public async Task<IActionResult> Editar(HabitacionDTO habitacionDTO, string nrohab)
+        public async Task<IActionResult> Editar(HabitacionDTO habitacionDTO, int id)
         {
             var responseApi = new ResponseAPI<int>();
 
-            try {
-                var dbHabitacion = await context.Habitaciones.FirstOrDefaultAsync(e => e.Nhab == nrohab);
+            try
+            {
+                var dbHabitacion = await context.Habitaciones.FirstOrDefaultAsync(e => e.Id == id);
                 if (dbHabitacion != null)
                 {
                     dbHabitacion.Camas = (int)habitacionDTO.Camas;
@@ -83,20 +84,41 @@ namespace HotelApp.Server.Controllers
                     context.Habitaciones.Update(dbHabitacion);
                     await context.SaveChangesAsync();
                     responseApi.EsCorrecto = true;
-                    responseApi.Mensaje = "se cargo la hab" + dbHabitacion.Nhab;
-                } else
+                    responseApi.Mensaje = "se cargo la hab" + dbHabitacion.Id;
+                }
+                else
                 {
                     responseApi.EsCorrecto = false;
                     responseApi.Mensaje = "habitacion no encontrada";
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 responseApi.EsCorrecto = false;
                 responseApi.Mensaje = ex.Message;
             }
             return Ok(responseApi);
         }
+
+        //[HttpPut("{id:int}")]
+        //public async Task<ActionResult> Put(Habitacion entidad, int id)
+        //{
+        //    if (id != entidad.Id)
+        //    {
+        //        return BadRequest("El id de la Persona no corresponde.");
+        //    }
+
+        //    var existe = await context.Habitaciones.AnyAsync(x => x.Id == id);
+        //    if (!existe)
+        //    {
+        //        return NotFound($"La Personas de id={id} no existe");
+        //    }
+
+        //    context.Update(entidad);
+        //    await context.SaveChangesAsync();
+        //    return Ok();
+        //}
 
         [HttpDelete]
 

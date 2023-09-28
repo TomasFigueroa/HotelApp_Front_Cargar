@@ -59,7 +59,8 @@ namespace HotelApp.Client.Servicios
         {
             var respuestaString = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<T>(respuestaString, new JsonSerializerOptions() { PropertyNameCaseInsensitive= true });
+            return JsonSerializer.Deserialize<T>(respuestaString,
+               new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
     }
 }

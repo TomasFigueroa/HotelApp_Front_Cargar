@@ -1,14 +1,14 @@
-﻿@page "/"
+﻿
 
 @inject IHTTPServicio http
-
 
 <PageTitle>Gestion Hotel</PageTitle>
 
 <main class="bg-fondo vh-100 p-3 container overflow-auto ">
-    <div class="container overflow-hidden">
+    <div class="card-container">
         <div class="row gap-1 justify-content-between text-center">
             <div class="botonera">
+                <button type="button" class=" btn btn-success text-uppercase gris-claro fw-bold shadow-sm " @onclick="NavegarAOtraPagina1">+ Habitacion</button>
                 <button type="button" class=" btn btn-light text-uppercase gris-claro fw-bold shadow-sm ">Disponibles: <span class="text-success fw-bold">@habitacionesDisponibles</span></button>
                 <button type="button" class=" btn btn-light fw-bold gris-claro text-uppercase shadow-sm ">Ocupadas: <span class="text-danger fw-bold">@habitacionesNoDisponibles</span></button>
                 <button type="button" class=" btn btn-light gris-claro fw-bold text-uppercase shadow-sm ">Reparacion: <span class="reparacion fw-bold">@habitacionesEnMantenimiento</span></button>
@@ -33,7 +33,7 @@
             {
             @foreach (var item in habitaciones)
             {
-                <div class="col-lg-2 bg-white border-radius shadow p-0">
+                <div class="col-lg-2 bg-white border-radius shadow p-0 ">
                     <div class="row gx-1 justify-content-between mb-4">
                         <div class="text-uppercase text-white text-center border-radius-top fw-bold pb-2" style="background-color: @ObtenerColorDeFondo(item.Estado)">
                             <p class="mb-1 ">@item.Nhab</p>
@@ -41,10 +41,11 @@
                         </div>
                         <div class="px-2 pb-2 text-center">
                             <p class="fw-bold gris-claro m-0 py-4 "></p>
-                            <button class="btn btn-secondary p-1 text-uppercase fw-bold font-xs">Ver habitacion</button>
+                                    <button class="btn btn-secondary p-1 text-uppercase fw-bold font-xs" @onclick="NavegarAOtraPagina">Ver habitacion</button>
                         </div>
-                                <a class="btn btn-primary  text-center"
-                                   href="editar/@item.Id">
+
+                                <a class="btn btn-primary enlace-grande text-uppercase fw-bold font-xs text-center"
+                                   href="habitacion/editar/@item.Id">
                                     <i>Editar</i>
                                 </a>
                     </div>
@@ -59,6 +60,8 @@
 
 @code {
   
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
 
     List<Habitacion> habitaciones;
 
@@ -125,6 +128,16 @@
                 habitacionesEnMantenimiento++;
             }
         }
+    }
+    private void NavegarAOtraPagina()
+    {
+        NavigationManager.NavigateTo("/personas"); // Ruta a la otra página
+
+    }
+    private void NavegarAOtraPagina1()
+    {
+        NavigationManager.NavigateTo("/crear"); // Ruta a la otra página
+
     }
 }
 
