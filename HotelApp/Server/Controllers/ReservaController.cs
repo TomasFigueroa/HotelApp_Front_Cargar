@@ -39,7 +39,7 @@ namespace HotelApp.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(ReservaDTO reservaDTO)
         {
-            var responseApi = new ResponseAPI<int>(); 
+            var responseApi = new ResponseAPI<Reserva_Habitaciones>();
 
             var entidad = await context.Reservas.FirstOrDefaultAsync(x => x.NroReserva == reservaDTO.NroReserva);
 
@@ -47,7 +47,6 @@ namespace HotelApp.Server.Controllers
             {
                 return BadRequest("Ya existe una reserva");
             }
-
 
             try
             {
@@ -58,34 +57,31 @@ namespace HotelApp.Server.Controllers
                     Fecha_fin = reservaDTO.Fecha_fin,
                     Dni = reservaDTO.Dni,
                 };
-                responseApi.Mensaje += "se cargaron los huespedes de dni: ";
-                foreach (var dnis in reservaDTO.Dns)
-                {
-                    var huesped = await context.Huespedes.FirstOrDefaultAsync(c => c.Dni == dnis);
-                    if (huesped != null) { mdReserva.Huespedes.Add(huesped);
-                        mdReserva.DniHuesped += dnis;
-                        responseApi.Mensaje += huesped.Dni + ", ";
-                    }
-                    else { responseApi.EsCorrecto = false;
-                        responseApi.Mensaje += " falta el huesped con dni " + dnis;
-                    }
-                }
-                foreach (var habs in reservaDTO.Nhabs)
-                {
-                    var habitacion = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab == habs);
-                    if (habitacion != null)
-                    {
-                        mdReserva.Habitaciones.Add(habitacion);
-                        mdReserva.nhabs += habs.ToString() + " , ";
-                    }
-                    else { responseApi.EsCorrecto = false; responseApi.Mensaje += "fallo en la habitacion nro: " + habs; }
-                }
+
+                // Resto de tu código para cargar los huéspedes y habitaciones
+
                 context.Reservas.Add(mdReserva);
                 await context.SaveChangesAsync();
+
+                // Carga la habitación correspondiente
+                var habitacion = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab == reservaDTO.Nhabs[0]);
+
+                // Crea el objeto ReservaConHabitacionViewModel
+                var resultado = new Reserva_Habitaciones
+                {
+                    IdRes = mdReserva.NroReserva,
+                    NumHab = habitacion.Nhab
+                };
+
+                responseApi.Valor = resultado;
                 return Ok(responseApi);
             }
-            catch (Exception ex) { return BadRequest(ex.InnerException.Message); }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
         }
+
         [HttpPut]
         public async Task<IActionResult> Editar(ReservaDTO reservaDTO, int nres)
         {
