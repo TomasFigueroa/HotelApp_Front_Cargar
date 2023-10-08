@@ -130,3 +130,6 @@ a, .btn-link {
     text-align: center; /* Centra el contenido en el contenedor */
     line-height: 15px; /* Alinea verticalmente el contenido en el centro */
 }
+.btn-light:hover {
+    background-color: lightgray !important;
+}
