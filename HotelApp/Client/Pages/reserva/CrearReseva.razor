@@ -15,10 +15,8 @@
                 Dni = reserva.Dni,
                 Fecha_fin = reserva.Fecha_fin,
                 Fecha_inicio = reserva.Fecha_inicio,
-                //Nhabs = reserva.nhabs
-              
-             
-             
+                Nhabs = reserva.nhabs,
+
          };
 
         var HTTPRespueta = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);

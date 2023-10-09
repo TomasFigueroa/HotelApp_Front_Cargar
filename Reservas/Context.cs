@@ -6,6 +6,7 @@ using System;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Reflection.Metadata;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Reservas.BData
 {
@@ -48,53 +49,26 @@ namespace Reservas.BData
 				o.Property(b => b.Nombres);
 				o.Property(b => b.Apellidos);
 				o.Property(b => b.Checkin);
-				o.Property(b => b.Num_Hab);
 				o.Property(b => b.DniPersona);
 			});
-			modelBuilder.Entity<Reserva>(o =>
-			{
-				o.HasKey(b => b.Id);
-				o.Property(b => b.NroReserva);
-				o.Property(b => b.Fecha_inicio);
-				o.Property(b => b.Fecha_fin);
-				o.Property(b => b.Dni);
+            modelBuilder.Entity<Reserva>(o =>
+            {
+                o.HasKey(b => b.Id);
+                o.Property(b => b.NroReserva);
+                o.Property(b => b.Fecha_inicio);
+                o.Property(b => b.Fecha_fin);
+                o.Property(b => b.Dni);
 				o.Property(b => b.nhabs);
-				o.HasMany(b => b.Huespedes);
-				o.HasMany(b => b.Habitaciones);
-			});
-
-
-
-			//modelBuilder
-			//.Entity<Habitacion>()
-			//.HasOne(e => e.reservadidhab)
-			//.OnDelete(DeleteBehavior.ClientCascade);
-
-
-
-            
-			modelBuilder.Entity<Habitacion>()
-				.HasOne<Reserva>(s => s.Reserva)
-				.WithMany(g => g.Habitaciones)
-				.HasForeignKey("ReservadDeHabitacionId")//clabe foranea de propiedad semilla
-				.OnDelete(DeleteBehavior.Cascade);
-
-
-			//modelBuilder.Entity<Huesped>()
-			//	.HasOne<Reserva>(s => s.reserva)
-			//	.WithMany(g => g.Huespedes)
-			//	.HasForeignKey("reservadidhuesp")
-			//	.OnDelete(DeleteBehavior.Cascade);
-
+                o.Property(b => b.DniHuesped)
+				.HasConversion(
+				v => string.Join(",", v),
+				v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList())
+				.IsRequired()
+				.Metadata.SetValueComparer(new ValueComparer<List<int>>(
+				(c1, c2) => c1.SequenceEqual(c2),
+				c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+				c => c.ToList()));
+            });
         }
-
-	}
+    }
 }
-
-
-//https://www.entityframeworktutorial.net/efcore/configure-one-to-many-relationship-using-fluent-api-in-ef-core.aspx-->ESTA HECHO EN WEBFORM(C# CON ASP.NET)
-
-//https://learn.microsoft.com/es-es/ef/core/modeling/relationships/one-to-one
-
-//https://learn.microsoft.com/en-us/ef/core/saving/cascade-delete
-

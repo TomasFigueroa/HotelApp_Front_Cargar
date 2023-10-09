@@ -24,15 +24,16 @@ namespace HotelApp.Server.Controllers
             return await context.Huespedes.ToListAsync();
         }
 
-        [HttpGet("int:dniHuesped")]
-        public async Task<ActionResult<Huesped>> GetDniPersona(string dniHuesped)
+        [HttpGet("GetDni/{dni:int}")]
+        public async Task<ActionResult<Huesped>> Get(int dni)
         {
-            var buscar = await context.Huespedes.FirstOrDefaultAsync(c => c.Dni == dniHuesped);
+            var buscar = await context.Huespedes.FirstOrDefaultAsync(c => c.Dni == dni);
 
-            if (buscar is null)
+            if (buscar == null)
             {
-                return BadRequest($"No se encontro el huesped de Dni numero: {dniHuesped}");
+                return BadRequest($"No se encontro el huesped de dni numero: {dni}");
             }
+
             return buscar;
         }
         [HttpPost]
@@ -54,7 +55,6 @@ namespace HotelApp.Server.Controllers
                     Nombres = HuespedDTO.Nombres,
                     Apellidos = HuespedDTO.Apellidos,
                     Checkin = HuespedDTO.Checkin,
-                    Num_Hab = HuespedDTO.Num_Hab,
                     DniPersona = HuespedDTO.DniPersona
 
                 };
@@ -66,18 +66,17 @@ namespace HotelApp.Server.Controllers
         }
 
         [HttpPut]
-        public async Task <IActionResult> Modificar(HuespedDTO HuespedDTO, string dniHues)
+        public async Task <IActionResult> Modificar(HuespedDTO HuespedDTO, int Id)
         {
             var responseApi = new ResponseAPI<int>();
             try
             {
-                var dbHuesped = await context.Huespedes.FirstOrDefaultAsync(e => e.Dni == dniHues);
-                if (dbHuesped.Dni != "")
+                var dbHuesped = await context.Huespedes.FirstOrDefaultAsync(e => e.Id == Id);
+                if (dbHuesped != null)
                 {
                     dbHuesped.Nombres = HuespedDTO.Nombres;
                     dbHuesped.Apellidos = HuespedDTO.Apellidos;
                     dbHuesped.Checkin = HuespedDTO.Checkin;
-                    dbHuesped.Num_Hab = HuespedDTO.Num_Hab;
                     dbHuesped.DniPersona = HuespedDTO.DniPersona;
                     context.Huespedes.Update(dbHuesped);
                     await context.SaveChangesAsync();
@@ -99,14 +98,14 @@ namespace HotelApp.Server.Controllers
             }
 
         [HttpDelete]
-        public async Task <IActionResult> Borrar(string dniHuesped)
+        public async Task <IActionResult> Borrar(int Id)
         {
             var responseApi = new ResponseAPI<int>();
 
             try
             {
-                var dbHuesped = await context.Huespedes.FirstOrDefaultAsync(e => e.Dni == dniHuesped);
-                if (dbHuesped.Dni != "")
+                var dbHuesped = await context.Huespedes.FirstOrDefaultAsync(e => e.Id == Id);
+                if (dbHuesped != null)
                 {
                     context.Huespedes.Remove(dbHuesped);
                     await context.SaveChangesAsync();

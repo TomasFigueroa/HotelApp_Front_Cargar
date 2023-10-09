@@ -47,8 +47,6 @@ namespace HotelApp.Server.Controllers
             {
                 return BadRequest("Ya existe una reserva");
             }
-
-
             try
             {
                 var mdReserva = new Reserva
@@ -57,29 +55,9 @@ namespace HotelApp.Server.Controllers
                     Fecha_inicio = reservaDTO.Fecha_inicio,
                     Fecha_fin = reservaDTO.Fecha_fin,
                     Dni = reservaDTO.Dni,
+                    DniHuesped = reservaDTO.Dns,
+                    nhabs = reservaDTO.Nhabs
                 };
-                responseApi.Mensaje += "se cargaron los huespedes de dni: ";
-                foreach (var dnis in reservaDTO.Dns)
-                {
-                    var huesped = await context.Huespedes.FirstOrDefaultAsync(c => c.Dni == dnis);
-                    if (huesped != null) { mdReserva.Huespedes.Add(huesped);
-                        mdReserva.DniHuesped += dnis;
-                        responseApi.Mensaje += huesped.Dni + ", ";
-                    }
-                    else { responseApi.EsCorrecto = false;
-                        responseApi.Mensaje += " falta el huesped con dni " + dnis;
-                    }
-                }
-                foreach (var habs in reservaDTO.Nhabs)
-                {
-                    var habitacion = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab == habs);
-                    if (habitacion != null)
-                    {
-                        mdReserva.Habitaciones.Add(habitacion);
-                        mdReserva.nhabs += habs.ToString() + " , ";
-                    }
-                    else { responseApi.EsCorrecto = false; responseApi.Mensaje += "fallo en la habitacion nro: " + habs; }
-                }
                 context.Reservas.Add(mdReserva);
                 await context.SaveChangesAsync();
                 return Ok(responseApi);
@@ -101,35 +79,8 @@ namespace HotelApp.Server.Controllers
                     dbReserva.Fecha_inicio = reservaDTO.Fecha_inicio;
                     dbReserva.Fecha_fin = reservaDTO.Fecha_fin;
                     dbReserva.Dni = reservaDTO.Dni;
-                    dbReserva.DniHuesped = "";
-                    dbReserva.nhabs = "";
-                    foreach(var Huesped in dbReserva.Huespedes) { dbReserva.Huespedes.Remove(Huesped); }
-                    foreach (var Habitacion in dbReserva.Habitaciones) { dbReserva.Habitaciones.Remove(Habitacion); }
-                    foreach (var dnis in reservaDTO.Dns)
-                    {
-                        var huesped = await context.Huespedes.FirstOrDefaultAsync(c => c.Dni == dnis);
-                        if (huesped != null)
-                        {
-                            dbReserva.Huespedes.Add(huesped);
-                            dbReserva.DniHuesped += ", " + dnis;
-                            responseApi.Mensaje += ", " + huesped.Dni;
-                        }
-                        else
-                        {
-                            responseApi.EsCorrecto = false;
-                            responseApi.Mensaje += " falta el huesped con dni " + dnis;
-                        }
-                    }
-                    foreach (var habs in reservaDTO.Nhabs)
-                    {
-                            var habitacion = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab == habs);
-                            if (habitacion != null)
-                            {
-                                dbReserva.Habitaciones.Add(habitacion);
-                                dbReserva.nhabs += habs.ToString() + " , ";
-                            }
-                            else { responseApi.EsCorrecto = false; responseApi.Mensaje += "fallo en la habitacion nro: " + habs; }
-                        }
+                    dbReserva.DniHuesped = reservaDTO.Dns;
+                    dbReserva.nhabs = reservaDTO.Nhabs;
                     context.Reservas.Update(dbReserva);
                     await context.SaveChangesAsync();
                     responseApi.EsCorrecto = true;
@@ -156,10 +107,7 @@ namespace HotelApp.Server.Controllers
             try
             {
                 //var dbReserva = await context.Reservas.FirstOrDefaultAsync(e => e.NroReserva == nroRes);
-                var dbReserva = await context.Reservas
-                    .Include(c => c.Habitaciones)
-                    .Include(c => c.Huespedes)
-                    .FirstOrDefaultAsync(e => e.NroReserva == nroRes);
+                var dbReserva = await context.Reservas.FirstOrDefaultAsync(e => e.NroReserva == nroRes);
 
                 if (dbReserva != null)
                 {
