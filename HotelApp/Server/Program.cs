@@ -6,7 +6,15 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", builder =>
+    {
+        builder.WithOrigins("https://localhost:7192") // localhost permitido
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<Context>(opciones => opciones.UseSqlServer("name=Conn"));
@@ -43,7 +51,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
+app.UseCors("AllowLocalhost");
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
