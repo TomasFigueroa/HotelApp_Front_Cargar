@@ -7,10 +7,8 @@
 </HeadContent>
 
 
-<a class="btn btn-success btn-lg rounded-pill d-inline-flex align-items-center justify-content-center mb-4 m-2" href="crear/reserva">
-    
-    Crear Reserva
-</a>
+<a class="btn btn-success rounded mb-4 m-2" href="crear/reserva">Crear Reserva</a>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -48,12 +46,12 @@
                                 @foreach (var item in reservas)
                                 {
                                     <tr>
-                                        <td class="p-3  text-center text-dark-100 ">@item.Dni</td>
-                                        <td class="p-3  text-center text-dark-100">@item.DniHuesped</td>
-                                        <td class="p-3  text-center text-dark-100">@item.Fecha_inicio</td>
-                                        <td class="p-3  text-center text-dark-100"> @item.Fecha_fin</td>
-                                        <td class="p-3  text-center text-dark-100">@item.nhabs</td>
-                                        <td class="p-3  d-flex justify-content-center align-items-center gap-2 ">
+                                        <td class="p-3 text-center text-dark-100 ">@item.Dni</td>
+                                        <td class="p-3 text-center text-dark-100">@item.DniHuesped</td>
+                                        <td class="p-3 text-center text-dark-100">@item.Fecha_inicio</td>
+                                        <td class="p-3 text-center text-dark-100"> @item.Fecha_fin</td>
+                                        <td class="p-3 text-center text-dark-100">@item.nhabs</td>
+                                        <td class="p-3 d-flex justify-content-center align-items-center gap-2 ">
 
                                             @*  <a class="btn btn-primary  d-inline-block mr-1"
                                 href="persona/editar/@item.Id">
@@ -64,7 +62,6 @@
                                 <i class="oi oi-cart"></i>
                                 </a>*@
                                             <button class="btn btn-danger  d-inline-block mr-1" @onclick="()=>Eliminar(item)">
-
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-x" viewBox="0 0 16 16">
                                                     <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z" />
                                                     <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708Z" />
@@ -83,7 +80,6 @@
 </div>
 
 @code {
-
 
     Reserva reservaBorrar;
     List<Reserva>? reservas;
@@ -116,7 +112,7 @@
         var respuesta = await http.Delete($"api/Persona/{reservaBorrar.Id}");
         if (respuesta.Error)
         {
-            var body = "error no se pudo borrar";
+            var body = "Error, no se pudo borrar";
         }
         reservaBorrar = null;
         await Leer();

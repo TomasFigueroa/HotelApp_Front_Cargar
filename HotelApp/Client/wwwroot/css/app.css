@@ -4,6 +4,10 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+body {
+    background-color: #e1e1e1 !important;
+}
+
 h1:focus {
     outline: none;
 }
@@ -70,6 +74,13 @@ a, .btn-link {
 .bg-primario {
     background-color: #265DAE;
 }
+.color-primario {
+    color: #265DAE !important ;
+}
+
+label {
+    color: #265DAE !important;
+}
 
 .bg-rojo-card {
     background-color: #E53232 !important;
@@ -80,7 +91,10 @@ a, .btn-link {
 }
 
 .bg-lila-card {
-    background-color: #9327D6 !important;
+    background-color: #9C27B0 !important;
+}
+.color-lila {
+    color: #9C27B0 !important;
 }
 
 .logo {

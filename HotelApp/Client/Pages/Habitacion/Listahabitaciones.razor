@@ -7,14 +7,14 @@
         <a href="/crear" class="btn btn-success text-uppercase fw-bold shadow-sm">
             <i class="bi bi-plus"></i> + Habitación
         </a>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
-            <i class="bi bi-bed text-success"></i> Disponibles: <span class="text-success fw-bold">@habitacionesDisponibles</span>
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Disponibles:
+             <span class="text-success fw-bold">@habitacionesDisponibles</span>
         </button>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
-            <i class="bi bi-bed text-danger"></i> Ocupadas: <span class="text-danger fw-bold">@habitacionesNoDisponibles</span>
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Ocupadas: 
+            <span class="text-danger fw-bold">@habitacionesNoDisponibles</span>
         </button>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
-            <i class="bi bi-wrench text-info"></i> Reparación: <span class="text-violet fw-bold">@habitacionesEnMantenimiento</span>
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Reparación:
+            <span class="color-lila fw-bold">@habitacionesEnMantenimiento</span>
         </button>
     </div>
     <div class="container">
@@ -28,7 +28,7 @@
             {
                 @if (habitaciones == null)
                 {
-                    <div class="d-flex justify-content-center align-items-center">
+                    <div class="d-flex justify-content-center align-items-center mt-5">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="card-footer text-center d-flex align-items-center gap-2">
                                     <a class="btn btn-secondary text-uppercase fw-bold font-xs" href="/personas">Ver</a>
-                                    <a class="btn btn-primary text-uppercase fw-bold font-xs" href="habitacion/editar/@item.Id">
+                                    <a class="btn btn-primary text-uppercase fw-bold font-xs" href="/habitacion/editar/@item.Id">
                                         <i class="fas fa-edit"></i> Editar
                                     </a>
                                 </div>
