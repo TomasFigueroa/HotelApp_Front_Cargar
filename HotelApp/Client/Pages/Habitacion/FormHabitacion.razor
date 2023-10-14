@@ -3,7 +3,7 @@
     <div class="form-group">
         <label for="Nhab">Numero de Habitacion</label>
         <div>
-            <InputText class="form-control" id="Nhab" @bind-Value="@habit.Nhab" />
+            <InputNumber class="form-control" id="Nhab" @bind-Value="@habit.Nhab" />
             <ValidationMessage For="@(() => habit.Nhab)" />
         </div>
     </div>

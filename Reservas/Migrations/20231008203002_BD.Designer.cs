@@ -12,8 +12,8 @@ using Reservas.BData;
 namespace Reservas.BData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230927001051_ini")]
-    partial class ini
+    [Migration("20231008203002_BD")]
+    partial class BD
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,16 +40,10 @@ namespace Reservas.BData.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nhab")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ReservadDeHabitacionId")
+                    b.Property<int>("Nhab")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ReservadDeHabitacionId");
 
                     b.ToTable("Habitaciones");
                 });
@@ -70,9 +64,8 @@ namespace Reservas.BData.Migrations
                     b.Property<bool>("Checkin")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Dni")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Dni")
+                        .HasColumnType("int");
 
                     b.Property<int>("DniPersona")
                         .HasColumnType("int");
@@ -82,15 +75,7 @@ namespace Reservas.BData.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Num_Hab")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReservaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ReservaId");
 
                     b.ToTable("Huespedes");
                 });
@@ -160,37 +145,12 @@ namespace Reservas.BData.Migrations
                     b.Property<int>("NroReserva")
                         .HasColumnType("int");
 
-                    b.Property<string>("nhabs")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("nhabs")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Reservas");
-                });
-
-            modelBuilder.Entity("Reservas.BData.Data.Entity.Habitacion", b =>
-                {
-                    b.HasOne("Reservas.BData.Data.Entity.Reserva", "Reserva")
-                        .WithMany("Habitaciones")
-                        .HasForeignKey("ReservadDeHabitacionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Reserva");
-                });
-
-            modelBuilder.Entity("Reservas.BData.Data.Entity.Huesped", b =>
-                {
-                    b.HasOne("Reservas.BData.Data.Entity.Reserva", null)
-                        .WithMany("Huespedes")
-                        .HasForeignKey("ReservaId");
-                });
-
-            modelBuilder.Entity("Reservas.BData.Data.Entity.Reserva", b =>
-                {
-                    b.Navigation("Habitaciones");
-
-                    b.Navigation("Huespedes");
                 });
 #pragma warning restore 612, 618
         }

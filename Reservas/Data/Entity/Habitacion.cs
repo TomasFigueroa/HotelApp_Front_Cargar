@@ -7,15 +7,12 @@ namespace Reservas.BData.Data.Entity
 	{
 		public int Id { get; set; }
         [Required]
-        public string Nhab { get; set; }
+        public int Nhab { get; set; }
 
 		[Required]
 		public int Camas { get; set; }
 
 		[Required(ErrorMessage = "El estado es Obligatorio")]
 		public string Estado { get; set; } = "";
-
-	
-        public Reserva Reserva { get; set; }
     }
 }

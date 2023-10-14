@@ -26,7 +26,20 @@ namespace HotelApp.Client.Servicios
                 return new HTTPRespuesta<T>(default, true, response);
             }
         }
+        public async Task<HTTPRespuesta<T>> GetCod<T>(string url)
+        {
+            var response = await http.GetAsync(url);
 
+            if (response.IsSuccessStatusCode)
+            {
+                var respuesta = await Deserealizar<T>(response);
+                return new HTTPRespuesta<T>(respuesta, false, response);
+            }
+            else
+            {
+                return new HTTPRespuesta<T>(default, true, response);
+            }
+        }
         public async Task<HTTPRespuesta <object>> Post<T>(string url, T enviar)
         {
             var enviarJson = JsonSerializer.Serialize(enviar);

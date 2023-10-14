@@ -15,12 +15,8 @@ namespace Reservas.BData.Data.Entity
 		[Required(ErrorMessage = "El Dni del dueño de la reserva es obligatorio")]
 		public int Dni { get; set; }
         [Required(ErrorMessage = "El Dni de los huespedes es obligatorio")]
-        public string DniHuesped { get; set; }
-        public List<Huesped> Huespedes { get; set; } = new List<Huesped>();
-        [Required(ErrorMessage = "se requieren los numeros de habitaciones")]
-        public string nhabs { get; set; }
-        public List<Habitacion> Habitaciones { get; set; } = new List<Habitacion>();	
+        public List<int> DniHuesped { get; set; } = new List<int>();
+        [Required(ErrorMessage = "se requieren el numero de habitacion")]
+        public int nhabs { get; set; }
     }
-
-    
 }

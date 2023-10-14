@@ -25,7 +25,7 @@ namespace HotelApp.Server.Controllers
             return await context.Personas.ToListAsync();
         }
 
-        [HttpGet("int:dniPersona")]
+        [HttpGet("GetDniP/{dniPersona:int}")]
         public async Task<ActionResult<Persona>> GetDniPersona(int dniPersona)
         {
             var buscar = await context.Personas.FirstOrDefaultAsync(c => c.Dni == dniPersona);
@@ -37,6 +37,7 @@ namespace HotelApp.Server.Controllers
 
             return buscar;
         }
+
         [HttpPost]
         public async Task<IActionResult> Post(PersonaDTO personaDTO)
         {

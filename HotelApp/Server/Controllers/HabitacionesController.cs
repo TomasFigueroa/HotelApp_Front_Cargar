@@ -29,17 +29,17 @@ namespace HotelApp.Server.Controllers
             return habitaciones;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Habitacion>> Get(int id)
+        [HttpGet("GetNhab/{Nhab:int}")]
+        public async Task<ActionResult<Habitacion>> Get(int Nhab)
         {
-            var buscar = await context.Habitaciones.AnyAsync(c => c.Id==id);
+            var buscar = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab == Nhab);
 
-            if (!buscar)
+            if (buscar == null)
             {
-                return BadRequest($"No se encontro la habitacion de numero: {id}");
+                return BadRequest($"No se encontro la habitacion de numero: {Nhab}");
             }
 
-            return await context.Habitaciones.FirstOrDefaultAsync(x => x.Id == id);
+            return buscar;
         }
 
         [HttpPost] 
@@ -122,13 +122,13 @@ namespace HotelApp.Server.Controllers
 
         [HttpDelete]
 
-        public async Task<IActionResult> Delete(string nrohab)
+        public async Task<IActionResult> Delete(int Id)
         {
             var responseApi = new ResponseAPI<int>();
 
            try
             {
-                var dbHabitacion = await context.Habitaciones.FirstOrDefaultAsync(e => e.Nhab == nrohab);
+                var dbHabitacion = await context.Habitaciones.FirstOrDefaultAsync(e => e.Id == Id);
                 if (dbHabitacion != null) 
                 {
                     context.Habitaciones.Remove(dbHabitacion);
