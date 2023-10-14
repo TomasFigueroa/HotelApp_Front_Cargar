@@ -4,9 +4,9 @@
 
 <div class="bg-fondo vh-100 p-4 container overflow-auto">
     <div class="botonera text-center d-flex gap-5 justify-content-center mb-4">
-        <button type="button" class="btn btn-success text-uppercase fw-bold shadow-sm" @onclick="NavegarAOtraPagina1">
+        <a href="/crear" class="btn btn-success text-uppercase fw-bold shadow-sm">
             <i class="bi bi-plus"></i> + Habitación
-        </button>
+        </a>
         <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
             <i class="bi bi-bed text-success"></i> Disponibles: <span class="text-success fw-bold">@habitacionesDisponibles</span>
         </button>
@@ -53,14 +53,13 @@
                                     <p class="fw-bold mb-0">Camas: @item.Camas</p>
                                 </div>
                                 <div class="card-footer text-center d-flex align-items-center gap-2">
-                                    <button class="btn btn-secondary text-uppercase fw-bold font-xs" @onclick="NavegarAOtraPagina">Ver</button>
+                                    <a class="btn btn-secondary text-uppercase fw-bold font-xs" href="/personas">Ver</a>
                                     <a class="btn btn-primary text-uppercase fw-bold font-xs" href="habitacion/editar/@item.Id">
                                         <i class="fas fa-edit"></i> Editar
                                     </a>
                                 </div>
                             </div>
                         </div>
-
                     }
                 }
             }
@@ -125,14 +124,8 @@
             }
         }
     }
-    private void NavegarAOtraPagina()
-    {
-        NavigationManager.NavigateTo("/personas"); // Ruta a la otra página
-
-    }
-    private void NavegarAOtraPagina1()
-    {
-        NavigationManager.NavigateTo("/crear"); // Ruta a la otra página
-
-    }
+    // private void NavegarAOtraPagina()
+    // {
+    //     NavigationManager.NavigateTo("/personas"); // Ruta a la otra página
+    // }
 }
