@@ -2,8 +2,13 @@
 @inject IHTTPServicio http
 @inject NavigationManager navigationManager
 
-
-<FormHabitacion habit="habitacion" onValidSubbmit="Grabar" onCancel="Cancelar" />
+<div class="p-4">
+    <div class="container col-md-6">
+        <div class="shadow p-4 bg-white">
+            <FormHabitacion habit="habitacion" onValidSubbmit="Grabar" onCancel="Cancelar" />
+        </div>
+    </div>
+</div>
 
 @code {
     private Habitacion habitacion = new();
@@ -13,8 +18,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitializedAsync();
-         await Mostrar();
+        await base.OnInitializedAsync();
+        await Mostrar();
     }
 
     private async Task Mostrar()
@@ -29,14 +34,12 @@
         {
             Mensaje = await respuesta.ObtenerError();
         }
-
     }
 
 
     private async Task Grabar()
     {
-        var respuesta = await http.Put<Habitacion>($"api/Habitacion/{habitacionid}",
-                                                  habitacion);
+        var respuesta = await http.Put<Habitacion>($"api/Habitacion/{habitacionid}", habitacion);
         if (respuesta.Error)
         {
             var body = respuesta.HttpResponseMessage;

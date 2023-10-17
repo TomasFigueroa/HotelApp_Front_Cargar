@@ -1,75 +1,74 @@
-﻿
-
-@inject IHTTPServicio http
+﻿@inject IHTTPServicio http
 
 <PageTitle>Gestion Hotel</PageTitle>
 
-<main class="bg-fondo vh-100 p-3 container overflow-auto ">
-    <div class="botonera text-center m-2">
-        <button type="button" class="btn btn-success text-uppercase fw-bold shadow-sm" @onclick="NavegarAOtraPagina1">
+<div class="bg-fondo vh-100 p-4 container overflow-auto">
+    <div class="botonera text-center d-flex gap-5 justify-content-center mb-4">
+        <a href="/crear" class="btn btn-success text-uppercase fw-bold shadow-sm">
             <i class="bi bi-plus"></i> + Habitación
+        </a>
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Disponibles:
+             <span class="text-success fw-bold">@habitacionesDisponibles</span>
         </button>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
-            <i class="bi bi-bed text-success"></i> Disponibles: <span class="text-success fw-bold">@habitacionesDisponibles</span>
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Ocupadas: 
+            <span class="text-danger fw-bold">@habitacionesNoDisponibles</span>
         </button>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
-            <i class="bi bi-bed text-danger"></i> Ocupadas: <span class="text-danger fw-bold">@habitacionesNoDisponibles</span>
-        </button>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
-            <i class="bi bi-wrench text-info"></i> Reparación: <span class="text-violet fw-bold">@habitacionesEnMantenimiento</span>
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Reparación:
+            <span class="color-lila fw-bold">@habitacionesEnMantenimiento</span>
         </button>
     </div>
     <div class="container">
         <div class="row">
-         
- 
-        @if (Error)
-        {
-            <tr>@Mensaje</tr>
-        }
-        else
-        {
-            @if (habitaciones == null)
+
+            @if (Error)
             {
-                <tr>Cargando....</tr>
-            }
-            else if (habitaciones.Count == 0)
-            {
-                <tr>no existen datos</tr>
+                <p>@Mensaje</p>
             }
             else
             {
-            @foreach (var item in habitaciones)
-            {
-                   <div class="col-lg-2 col-md-4 col-sm-6 col-12 mb-4">
-                     <div class="card rounded shadow">
+                @if (habitaciones == null)
+                {
+                    <div class="d-flex justify-content-center align-items-center mt-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                }
+                else if (habitaciones.Count == 0)
+                {
+                    <p>no existen datos</p>
+                }
+                else
+                {
+                    @foreach (var item in habitaciones)
+                    {
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-12 mb-4">
+                            <div class="card rounded shadow">
 
-                                <div class="card-header text-uppercase text-center fw-bold" style="background-color: @(item.Estado == "disponible" ? "#4CAF50" : (item.Estado == "ocupada" ? "#FF5722" : (item.Estado == "reparacion" ? "#9C27B0" : "#607D8B"))); color: white;">
+                                <div class="card-header text-uppercase text-center fw-bold" style="background-color: @(item.Estado == "disponible" ? "#4CAF50" : (item.Estado == "ocupada" ? "#ff3333" : (item.Estado == "reparacion" ? "#9C27B0" : "#4CAF50"))); color: white;">
                                     <p class="mb-1">@item.Nhab</p>
                                     <p class="mb-0">@item.Estado</p>
                                 </div>
                                 <div class="card-body text-center">
                                     <p class="fw-bold mb-0">Camas: @item.Camas</p>
-                                    <button class="btn btn-secondary mt-3 text-uppercase fw-bold font-xs" @onclick="NavegarAOtraPagina">Ver habitación</button>
                                 </div>
-                                <div class="card-footer text-center">
-                                    <a class="btn btn-primary text-uppercase fw-bold font-xs" href="habitacion/editar/@item.Id">
+                                <div class="card-footer text-center d-flex align-items-center gap-2">
+                                    <a class="btn btn-secondary text-uppercase fw-bold font-xs" href="/personas">Ver</a>
+                                    <a class="btn btn-primary text-uppercase fw-bold font-xs" href="/habitacion/editar/@item.Id">
                                         <i class="fas fa-edit"></i> Editar
                                     </a>
                                 </div>
-                      </div>
-                   </div>
-                 
+                            </div>
+                        </div>
+                    }
+                }
             }
-            }
-            }
-           
         </div>
     </div>
-</main>
+</div>
 
 @code {
-  
+
     [Inject]
     private NavigationManager NavigationManager { get; set; }
 
@@ -77,7 +76,7 @@
 
     string Mensaje = "";
     bool Error;
-   
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -99,20 +98,6 @@
         }
     }
 
-    private string ObtenerColorDeFondo(string estado)
-    {
-        switch (estado)
-        {
-            case "disponible":
-                return "green"; // Cambia el color verde para el estado "activo"
-            case "ocupada":
-                return "red"; // Cambia el color rojo para el estado "inactivo"
-            case "reparacion":
-                return "violet"; // Color predeterminado para otros estados
-            default:
-                return "black";
-        }
-    }
     int habitacionesDisponibles;
     int habitacionesNoDisponibles;
     int habitacionesEnMantenimiento;
@@ -125,7 +110,7 @@
 
         foreach (var habitacion in habitaciones)
         {
-            if (habitacion.Estado== "disponible")
+            if (habitacion.Estado == "disponible")
             {
                 habitacionesDisponibles++;
             }
@@ -139,18 +124,8 @@
             }
         }
     }
-    private void NavegarAOtraPagina()
-    {
-        NavigationManager.NavigateTo("/personas"); // Ruta a la otra página
-
-    }
-    private void NavegarAOtraPagina1()
-    {
-        NavigationManager.NavigateTo("/crear"); // Ruta a la otra página
-
-    }
+    // private void NavegarAOtraPagina()
+    // {
+    //     NavigationManager.NavigateTo("/personas"); // Ruta a la otra página
+    // }
 }
-
-
-
-

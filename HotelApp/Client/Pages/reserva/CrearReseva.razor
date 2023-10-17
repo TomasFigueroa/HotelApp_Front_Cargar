@@ -2,8 +2,13 @@
 @inject IHTTPServicio http
 @inject NavigationManager navigationManager
 
-
-<FormReserva res="reserva" onValidSubbmit="Grabar" onCancel="Cancelar" />
+<div class="p-4">
+    <div class="container col-md-6">
+        <div class="shadow p-4 bg-white">
+            <FormReserva res="reserva" onValidSubbmit="Grabar" onCancel="Cancelar" />
+        </div>
+    </div>
+</div>
 
 @code {
 

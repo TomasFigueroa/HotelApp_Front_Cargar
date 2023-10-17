@@ -2,9 +2,13 @@
 @inject IHTTPServicio http
 @inject NavigationManager navigationManager
 
-
-<FormPersonas pers="persona" onValidSubbmit="Grabar" onCancel="Cancelar" />
-
+<div class="p-4">
+    <div class="container col-md-6">
+        <div class="shadow p-4 bg-white">
+            <FormPersonas pers="persona" onValidSubbmit="Grabar" onCancel="Cancelar" />
+        </div>
+    </div>
+</div>
 @code {
     private Persona persona = new Persona();
      
