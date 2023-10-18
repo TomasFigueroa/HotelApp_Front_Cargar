@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Reservas.BData.Migrations
 {
     /// <inheritdoc />
-    public partial class BD : Migration
+    public partial class incial1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

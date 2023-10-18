@@ -17,8 +17,8 @@ namespace Reservas.BData
 		public DbSet<Huesped> Huespedes => Set<Huesped>();
 		public DbSet<Habitacion> Habitaciones => Set<Habitacion>();
 		public DbSet<Reserva> Reservas => Set<Reserva>();
-
-		public DbSet<Persona> Personas => Set<Persona>();
+       
+        public DbSet<Persona> Personas => Set<Persona>();
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{ }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

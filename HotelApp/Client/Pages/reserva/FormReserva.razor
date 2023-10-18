@@ -20,18 +20,23 @@
     <div class="form-group">
         <label class="mb-2 fw-bold color-primario">DNI de Huéspedes</label>
         <div class="mb-2">
-            @foreach (var dni in dniHuespedes)
+            @foreach (int dni in dniHuespedes)
             {
-                var dniTemp = dni; // Variable temporal para mantener el valor actual de dni
+           
                 <div class="input-group">
-                    <InputNumber class="form-control" @bind-Value="@dniTemp" />
+                    <p>@dni</p>  
                     <div class="input-group-append">
-                        <button class="btn btn-danger" @onclick="() => EliminarDni(dniTemp)">Eliminar</button>
+                        <a class="btn btn-danger" @onclick="() => EliminarDni(dni)">Eliminar</a>
                     </div>
                 </div>
             }
 
-            <button class="btn btn-primary" @onclick="AgregarDni">Agregar otro DNI</button>
+            <div class="form-group">
+                <div class="input-group-append">
+                    <InputNumber class="form-control" @bind-Value="@dnis" />
+                    <a class="btn btn-success" @onclick="@(()=>AgregarDni(dnis))">Agregar otro DNI</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -66,16 +71,23 @@
 
 
 @code {
-
+    
     [Parameter] public Reserva res { get; set; } = new Reserva();
     [Parameter] public EventCallback onValidSubbmit { get; set; }
     [Parameter] public EventCallback onCancel { get; set; }
     [Parameter] public List<int> dniHuespedes { get; set; } = new List<int>();
+    [Parameter] public List<int> nuevosDNIs { get; set; } = new List<int>();
+    //[Parameter] public DNI nd { get; set; }= new DNI();
+    List<Reserva>? reservas;
+    int dnis;
+    
 
-
-    private void AgregarDni()
+    private void AgregarDni(int addni)
     {
-        dniHuespedes.Add(0); // Agregar un nuevo campo en blanco.
+        //NavigationManager.NavigateTo("/dniinput");
+      /*  dniHuespedes.Add(new());*/ // Agregar un nuevo campo en blanco.
+        dniHuespedes.Add(addni);
+         // Reinicia el valor del nuevo DNI después de agregarlo
     }
 
     private void EliminarDni(int dni)

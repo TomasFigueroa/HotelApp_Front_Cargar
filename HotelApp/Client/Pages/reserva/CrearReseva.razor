@@ -5,7 +5,7 @@
 <div class="p-4">
     <div class="container col-md-6">
         <div class="shadow p-4 bg-white">
-            <FormReserva res="reserva" onValidSubbmit="Grabar" onCancel="Cancelar" />
+            <FormReserva res="reserva" dniHuespedes="dniHuespedes" onValidSubbmit="Grabar" onCancel="Cancelar" />
         </div>
     </div>
 </div>
@@ -26,15 +26,17 @@
                     Fecha_fin = reserva.Fecha_fin,
                     Fecha_inicio = reserva.Fecha_inicio,
                     Nhabs = reserva.nhabs,
-                    Dns = dniHuespedes
+                    Dns= dniHuespedes
+                   
                 };
-            var HTTPRespueta = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
+        
+        var HTTPRespueta = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
 
             if (HTTPRespueta.Error)
             {
                 var body = HTTPRespueta.HttpResponseMessage;
         }
-        else { navigationManager.NavigateTo("/personas"); }
+        else { navigationManager.NavigateTo("/reserva"); }
 
         }
     private void Cancelar()
