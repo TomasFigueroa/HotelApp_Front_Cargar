@@ -4,6 +4,10 @@
 
 <HeadContent>
     <meta name="description" content="Listado de Reserva" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
 </HeadContent>
 
 
@@ -47,7 +51,19 @@
                                 {
                                     <tr>
                                         <td class="p-3 text-center text-dark-100 ">@item.Dni</td>
-                                        <td class="p-3 text-center text-dark-100">@item.DniHuesped</td>
+                                        <td>
+                                            <InputSelect class="form-control p-3 text-center text-dark-100" id="Estado" @bind-Value="@item.DniHuesped">
+                                                <option class="text-center" selected disabled>DNI de Huéspedes</option>
+                                                @foreach (var dni in item.DniHuesped)
+                                                {
+                                                    <option>@dni</option>
+                                                }
+                                            </InputSelect>
+                                        </td>
+                                        
+
+
+                                        
                                         <td class="p-3 text-center text-dark-100">@item.Fecha_inicio</td>
                                         <td class="p-3 text-center text-dark-100"> @item.Fecha_fin</td>
                                         <td class="p-3 text-center text-dark-100">@item.nhabs</td>
@@ -109,7 +125,7 @@
     {
         reservaBorrar = persBorrar;
 
-        var respuesta = await http.Delete($"api/Persona/{reservaBorrar.Id}");
+        var respuesta = await http.Delete($"api/Reservar/{reservaBorrar.NroReserva}");
         if (respuesta.Error)
         {
             var body = "Error, no se pudo borrar";
