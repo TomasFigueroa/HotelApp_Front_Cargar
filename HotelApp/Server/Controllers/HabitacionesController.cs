@@ -29,6 +29,19 @@ namespace HotelApp.Server.Controllers
             return habitaciones;
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Habitacion>> GetById(int id)
+        {
+            var habitacion = await context.Habitaciones.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (habitacion == null)
+            {
+                return NotFound($"No se encontró una habitación con el ID: {id}");
+            }
+
+            return habitacion;
+        }
+
         [HttpGet("GetNhab/{Nhab:int}")]
         public async Task<ActionResult<Habitacion>> Get(int Nhab)
         {
