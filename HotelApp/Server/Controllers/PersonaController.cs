@@ -25,6 +25,19 @@ namespace HotelApp.Server.Controllers
             return await context.Personas.ToListAsync();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Persona>> Get(int id)
+        {
+            var persona = await context.Personas.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (persona == null)
+            {
+                return NotFound(); 
+            }
+
+            return persona;
+        }
+
         [HttpGet("GetDniP/{dniPersona:int}")]
         public async Task<ActionResult<Persona>> GetDniPersona(int dniPersona)
         {
@@ -67,14 +80,14 @@ namespace HotelApp.Server.Controllers
             catch (Exception ex) { return BadRequest(ex); }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Editar(PersonaDTO personaDTO, int dniPer)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Editar(PersonaDTO personaDTO, int id)
         {
             var responseApi = new ResponseAPI<int>();
 
             try
             {
-                var dbPersona = await context.Personas.FirstOrDefaultAsync(e => e.Dni == dniPer);
+                var dbPersona = await context.Personas.FirstOrDefaultAsync(e => e.Id == id);
                 if (dbPersona != null)
                 {
                     dbPersona.Nombres = personaDTO.Nombres;

@@ -1,4 +1,4 @@
-﻿
+﻿@inject NavigationManager navigationManager;
 @page "/personas"
 @inject IHTTPServicio http
 <PageTitle>PERSONAS</PageTitle>
@@ -65,6 +65,11 @@
                                                     <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708Z" />
                                                 </svg>
                                             </button>
+                                            <button class="btn btn-primary d-inline-block" @onclick="()=>Editar(item.Id)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                    <path d="M11.667 0a.667.667 0 0 1 .474.196l3.56 3.56a.667.667 0 0 1 0 .948l-9.333 9.334a.667.667 0 0 1-.39.21l-4.264.002a.667.667 0 0 1-.472-.196l-3.56-3.56a.667.667 0 0 1-.195-.472L0 4.333a.667.667 0 0 1 .196-.473l9.333-9.333a.667.667 0 0 1 .473-.196zm1.83 1.795L1.5 11.964l-.002 2.83 2.83-.002 9.167-9.168-2.83-2.83-7.137 7.136z" />
+                                                </svg>
+                                            </button>
                                         </td>
                                     </tr>
                                 }
@@ -115,5 +120,11 @@
         personaBorrar = null;
         await Leer();
     }
+
+    private void Editar(int personId)
+    {
+        navigationManager.NavigateTo($"/persona/editar/{personId}");
+    }
+
    
 }
