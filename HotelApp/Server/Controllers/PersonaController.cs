@@ -114,14 +114,14 @@ namespace HotelApp.Server.Controllers
             return Ok(responseApi);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Borrar(int dniHuesp)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Borrar(int id)
         {
             var responseApi = new ResponseAPI<int>();
 
             try
             {
-                var dbPersona = await context.Personas.FirstOrDefaultAsync(e => e.Dni == dniHuesp);
+                var dbPersona = await context.Personas.FirstOrDefaultAsync(e => e.Id == id);
                 if (dbPersona != null)
                 {
                     context.Personas.Remove(dbPersona);

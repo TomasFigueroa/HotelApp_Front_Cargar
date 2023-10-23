@@ -24,8 +24,21 @@ namespace HotelApp.Server.Controllers
             return await context.Huespedes.ToListAsync();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Huesped>> Get(int id)
+        {
+            var buscar = await context.Huespedes.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (buscar == null)
+            {
+                return BadRequest($"No se encontro el huesped de dni numero: {id}");
+            }
+
+            return buscar;
+        }
+
         [HttpGet("GetDni/{dni:int}")]
-        public async Task<ActionResult<Huesped>> Get(int dni)
+        public async Task<ActionResult<Huesped>> GetDni(int dni)
         {
             var buscar = await context.Huespedes.FirstOrDefaultAsync(c => c.Dni == dni);
 
@@ -65,7 +78,7 @@ namespace HotelApp.Server.Controllers
             catch (Exception ex) { return BadRequest(ex); }
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         public async Task <IActionResult> Modificar(HuespedDTO HuespedDTO, int Id)
         {
             var responseApi = new ResponseAPI<int>();
@@ -97,7 +110,7 @@ namespace HotelApp.Server.Controllers
             return Ok(responseApi);
             }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task <IActionResult> Borrar(int Id)
         {
             var responseApi = new ResponseAPI<int>();

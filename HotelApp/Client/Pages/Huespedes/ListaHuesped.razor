@@ -1,0 +1,193 @@
+﻿@page "/huespedes"
+@inject IHTTPServicio http
+@inject NavigationManager navigationManager
+
+
+<style>
+    .verde {
+        background-color: #4CAF50;
+        color: #fff;
+    }
+
+    .rojo {
+        background-color: #FF5733;
+        color: #fff;
+    }
+</style>
+
+<PageTitle>Huespedes</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Listado de Huespedes" />
+</HeadContent>
+
+<div class="m-2">
+    <a class="btn btn-success d-inline-block mb-4 rounded" href="crear/huesped">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-plus-fill me-2" viewBox="0 0 16 16">
+            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+            <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+        </svg>
+        Crear Huesped
+    </a>
+</div>
+<div class="mb-3">
+    <label class="mb-2 fw-bold color-primario">Buscar por DNI:</label>
+    <div class="input-group">
+        <InputNumber type="text" class="form-control" @bind-Value="dniBusqueda" />
+        <button class="btn btn-primary" @onclick="BuscarPorDNI">Buscar</button>
+        @if (huesped != null)
+        {
+            <button class="btn btn-secondary" @onclick="MostrarTodos">Mostrar Todos</button>
+        }
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped shadow" style="width: 100%;">
+                    <thead class="bg-primary text-white text-center fw-bolder">
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">DNI</th>
+                            <th scope="col">Checkin</th>
+                            <th scope="col">DNI Persona</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Error)
+                        {
+                            <tr>@Mensaje</tr>
+                        }
+                        else
+                        {
+                            @if (huespedes == null)
+                            {
+                                <tr>Cargando....</tr>
+                            }
+                            else if (huespedes.Count == 0)
+                            {
+                                <tr>no existen datos</tr>
+                            }
+                            else
+                            {
+                                @foreach (var item in huespedes)
+                                {
+                                    <tr class="bg-white">
+                                        <td class="p-3 text-center text-dark-100">@item.Nombres</td>
+                                        <td class="p-3 text-center text-dark-100">@item.Apellidos</td>
+                                        <td class="p-3 text-center text-dark-100">@item.Dni</td>
+                                        <td class="p-3 text-center text-dark-100">
+                                            @if (item.Checkin)
+                                            {
+                                                <span class="verde">
+                                                    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="10" cy="10" r="10" fill="green" />
+                                                        <text x="5" y="15" font-size="12" fill="white">✓</text>
+                                                    </svg>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="rojo">
+                                                    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="10" cy="10" r="10" fill="red" />
+                                                        <text x="5" y="15" font-size="12" fill="white">✗</text>
+                                                    </svg>
+                                                </span>
+                                            }
+                                        </td>
+
+                                        <td class="p-3 text-center text-dark-100">@item.DniPersona</td>
+                                        <td class="p-3 d-flex justify-content-center align-items-center gap-2">
+                                            <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-x" viewBox="0 0 16 16">
+                                                    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z" />
+                                                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708Z" />
+                                                </svg>
+                                            </button>
+                                            <button class="btn btn-primary d-inline-block d-inline-block" @onclick="()=>Editar(item.Id)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                    <path d="M11.667 0a.667.667 0 0 1 .474.196l3.56 3.56a.667.667 0 0 1 0 .948l-9.333 9.334a.667.667 0 0 1-.39.21l-4.264.002a.667.667 0 0 1-.472-.196l-3.56-3.56a.667.667 0 0 1-.195-.472L0 4.333a.667.667 0 0 1 .196-.473l9.333-9.333a.667.667 0 0 1 .473-.196zm1.83 1.795L1.5 11.964l-.002 2.83 2.83-.002 9.167-9.168-2.83-2.83-7.137 7.136z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    int dniBusqueda;
+    Huesped huespedBorrar;
+    List<Huesped> huespedes;
+    Huesped huesped;
+    bool Error = false;
+    string Mensaje = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await Leer();
+    }
+
+    private async Task Leer()
+    {
+        var respuesta = await http.Get<List<Huesped>>("api/Huesped");
+        Error = respuesta.Error;
+        if (!respuesta.Error)
+        {
+            huespedes = respuesta.Respuesta;
+        }
+        else
+        {
+            Mensaje = await respuesta.ObtenerError();
+        }
+    }
+
+    private async Task Eliminar(Huesped hspBorrar)
+    {
+        huespedBorrar = hspBorrar;
+
+        var respuesta = await http.Delete($"api/Huesped/{huespedBorrar.Id}");
+        if (respuesta.Error)
+        {
+            var body = "Error, no se pudo borrar";
+        }
+        huespedBorrar = null;
+        await Leer();
+    }
+
+    private void Editar(int huespedId)
+    {
+        navigationManager.NavigateTo($"/huesped/editar/{huespedId}");
+    }
+
+    private async Task BuscarPorDNI()
+    {
+        var respuesta = await http.GetCod<Huesped>($"api/Huesped/GetDni/{dniBusqueda}");
+        Error = respuesta.Error;
+        if (!respuesta.Error)
+        {
+            huesped = respuesta.Respuesta;
+        }
+        else
+        {
+            Mensaje = await respuesta.ObtenerError();
+        }
+    }
+
+    private async Task MostrarTodos()
+    {
+        dniBusqueda = 0;
+        huesped = null;
+    }
+}

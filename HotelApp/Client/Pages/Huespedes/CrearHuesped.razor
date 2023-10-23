@@ -1,0 +1,41 @@
+﻿@page "/crear/huesped"
+@inject IHTTPServicio http
+@inject NavigationManager navigationManager
+
+<div class="p-4">
+    <div class="container col-md-6">
+        <div class="shadow p-4 bg-white">
+            <FormHuesped huesp="huesped" onValidSubbmit="Grabar" onCancel="Cancelar" />
+        </div>
+    </div>
+</div>
+
+@code {
+    private Huesped huesped = new Huesped();
+
+    private async Task Grabar()
+    {
+        HuespedDTO huespedDTO = new()
+            {
+                Nombres = huesped.Nombres,
+                Apellidos = huesped.Apellidos,
+                Dni = huesped.Dni,
+                Checkin = huesped.Checkin,
+                DniPersona = huesped.DniPersona
+            };
+
+        var HTTPRespueta = await http.Post<HuespedDTO>("api/Huesped", huespedDTO);
+
+        if (HTTPRespueta.Error)
+        {
+            var body = HTTPRespueta.HttpResponseMessage;
+        }
+
+        navigationManager.NavigateTo("/personas");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/");
+    }
+}

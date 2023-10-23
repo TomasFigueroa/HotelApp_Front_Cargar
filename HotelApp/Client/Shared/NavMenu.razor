@@ -15,8 +15,15 @@
                 Reservas
             </button>
         </div>
+        <div class="mt-3">
+            <button type="button" class="btn btn-light btn-md text-uppercase fw-bold shadow-sm w-100" @onclick="NavegarAPersonas">
+                Lista de Personas
+            </button>
+        </div>
     </div>
 </div>
+
+
 
 
 
@@ -46,4 +53,10 @@
     int habitacionesDisponibles = 0;
     int habitacionesNoDisponibles = 0;
     int habitacionesEnMantenimiento = 0;
+
+    private void NavegarAPersonas()
+    {
+        NavigationManager.NavigateTo("/personas");
+    }
+
 }
