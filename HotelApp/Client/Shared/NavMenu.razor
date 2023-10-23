@@ -20,6 +20,11 @@
                 Lista de Personas
             </button>
         </div>
+        <div class="mt-3">
+            <button type="button" class="btn btn-light btn-md text-uppercase fw-bold shadow-sm w-100" @onclick="NavegarAHuespedes">
+                Lista de Huespedes
+            </button>
+        </div>
     </div>
 </div>
 
@@ -39,6 +44,7 @@
     {
         NavigationManager.NavigateTo("/reserva");
     }
+
     bool Error;
     private bool collapseNavMenu = true;
 
@@ -59,4 +65,8 @@
         NavigationManager.NavigateTo("/personas");
     }
 
+    private void NavegarAHuespedes()
+    {
+        NavigationManager.NavigateTo("/huespedes");
+    }
 }
