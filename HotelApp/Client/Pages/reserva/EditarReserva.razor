@@ -1,4 +1,4 @@
-﻿@page "/reservar/editar/{nroRes:int}"
+﻿@page "/reservar/editar/{IdRes:int}"
 @inject IHTTPServicio http
 @inject NavigationManager navigationManager
 
@@ -12,7 +12,7 @@
 
 @code {
     private Reserva reserva = new Reserva();
-    [Parameter] public int nroRes { get; set; }
+    [Parameter] public int IdRes { get; set; }
     string Mensaje = "";
 
     protected override async Task OnInitializedAsync()
@@ -23,7 +23,7 @@
 
     private async Task Mostrar()
     {
-        var respuesta = await http.Get<Reserva>($"api/Reservar/{nroRes}");
+        var respuesta = await http.Get<Reserva>($"api/Reservar/{IdRes}");
 
         if (!respuesta.Error)
         {
@@ -37,7 +37,7 @@
 
     private async Task Grabar()
     {
-        var respuesta = await http.Put<Reserva>($"api/Reservar/{nroRes}", reserva);
+        var respuesta = await http.Put<Reserva>($"api/Reservar/{IdRes}", reserva);
         if (respuesta.Error)
         {
             var body = respuesta.HttpResponseMessage;

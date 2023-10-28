@@ -24,14 +24,14 @@ namespace HotelApp.Server.Controllers
             return await context.Reservas.ToListAsync();
         }
 
-        [HttpGet("int:NroReserva")]
-        public async Task<ActionResult<Reserva>> GetNroReserva(int nroReserva)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Reserva>> Get(int id)
         {
-            var buscar = await context.Reservas.FirstOrDefaultAsync(c => c.NroReserva == nroReserva);
+            var buscar = await context.Reservas.FirstOrDefaultAsync(c => c.Id == id);
 
             if (buscar is null)
             {
-                return BadRequest($"No se encontro la reserva de nro: {nroReserva}");
+                return BadRequest($"No se encontro la reserva de id: {id}");
             }
 
             return buscar;
@@ -64,14 +64,14 @@ namespace HotelApp.Server.Controllers
             }
             catch (Exception ex) { return BadRequest(ex.InnerException.Message); }
         }
-        [HttpPut("{nres:int}")]
-        public async Task<IActionResult> Editar(ReservaDTO reservaDTO, int nres)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Editar(ReservaDTO reservaDTO, int id)
         {
             var responseApi = new ResponseAPI<int>();
 
             try
             {
-                var dbReserva = await context.Reservas.FirstOrDefaultAsync(e => e.NroReserva == nres);
+                var dbReserva = await context.Reservas.FirstOrDefaultAsync(e => e.Id == id);
 
                 if (dbReserva != null)
                 {
@@ -100,15 +100,15 @@ namespace HotelApp.Server.Controllers
             return Ok(responseApi);
         }
      
-        [HttpDelete("{nroRes:int}")]
-        public async Task<IActionResult> Borrar(int nroRes)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Borrar(int id)
         {
             var responseApi = new ResponseAPI<int>();
 
             try
             {
                 //var dbReserva = await context.Reservas.FirstOrDefaultAsync(e => e.NroReserva == nroRes);
-                var dbReserva = await context.Reservas.FirstOrDefaultAsync(e => e.NroReserva == nroRes);
+                var dbReserva = await context.Reservas.FirstOrDefaultAsync(e => e.Id == id);
 
                 if (dbReserva != null)
                 {

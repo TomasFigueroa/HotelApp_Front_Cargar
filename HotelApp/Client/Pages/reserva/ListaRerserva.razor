@@ -56,7 +56,7 @@
                                     <td class="p-3 text-center text-dark-100">@item.nhabs</td>
                                     <td class="p-3 d-flex justify-content-center align-items-center gap-2 ">
                                         <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)"><i class="oi oi-trash"></i></button>
-                                        <button class="btn btn-primary d-inline-block" @onclick="()=>Editar(item.NroReserva)"><i class="oi oi-pencil"></i></button>
+                                        <button class="btn btn-primary d-inline-block" @onclick="()=>Editar(item.Id)"><i class="oi oi-pencil"></i></button>
                                     </td>
                                 </tr>
                             }
@@ -98,7 +98,7 @@
     {
         reservaBorrar = reserBorr;
 
-        var respuesta = await http.Delete($"api/Reservar/{reservaBorrar.NroReserva}");
+        var respuesta = await http.Delete($"api/Reservar/{reservaBorrar.Id}");
         if (respuesta.Error)
         {
             var body = "Error, no se pudo borrar";
@@ -107,8 +107,8 @@
         await Leer();
     }
 
-    private void Editar(int nroReserva)
+    private void Editar(int id)
     {
-        navigationManager.NavigateTo($"/reservar/editar/{nroReserva}");
+        navigationManager.NavigateTo($"/reservar/editar/{id}");
     }
 }
