@@ -5,12 +5,14 @@
 <div class="p-4">
     <div class="container col-md-6">
         <div class="shadow p-4 bg-white">
-            <FormReserva res="reserva" onValidSubbmit="Grabar" onCancel="Cancelar" />
+            <FormReserva res="reserva" dniHuespedes="dniHuespedes" onValidSubbmit="Grabar" onCancel="Cancelar" />
         </div>
     </div>
 </div>
 
 @code {
+    private List<int> dniHuespedes = new List<int>();
+
     private Reserva reserva = new Reserva();
     [Parameter] public int IdRes { get; set; }
     string Mensaje = "";
@@ -37,7 +39,16 @@
 
     private async Task Grabar()
     {
-        var respuesta = await http.Put<Reserva>($"api/Reservar/{IdRes}", reserva);
+        ReservaDTO reservaed = new()
+            {
+                NroReserva = reserva.NroReserva,
+                Dni = reserva.Dni,
+                Fecha_fin = reserva.Fecha_fin,
+                Fecha_inicio = reserva.Fecha_inicio,
+                Nhabs = reserva.nhabs,
+                Dns = dniHuespedes
+            };
+        var respuesta = await http.Put<ReservaDTO>($"api/Reservar/{IdRes}", reservaed);
         if (respuesta.Error)
         {
             var body = respuesta.HttpResponseMessage;
