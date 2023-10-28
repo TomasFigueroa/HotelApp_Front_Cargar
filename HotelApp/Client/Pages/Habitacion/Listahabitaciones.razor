@@ -2,7 +2,7 @@
 
 <PageTitle>Gestion Hotel</PageTitle>
 
-<div class="bg-fondo vh-100 p-4 container overflow-auto">
+<div class="bg-fondo vh-100 p-3 container overflow-auto">
     <div class="botonera text-center d-flex gap-5 justify-content-center mb-4">
         <a href="/crear" class="btn btn-success text-uppercase fw-bold shadow-sm">
             <i class="bi bi-plus"></i> + Habitación
@@ -42,7 +42,7 @@
                 {
                     @foreach (var item in habitaciones)
                     {
-                        <div class="col-lg-2 col-md-4 col-sm-6 col-12 mb-4">
+                        <div class="col-3 mb-4">
                             <div class="card rounded shadow">
 
                                 <div class="card-header text-uppercase text-center fw-bold" style="background-color: @(item.Estado == "disponible" ? "#4CAF50" : (item.Estado == "ocupada" ? "#ff3333" : (item.Estado == "reparacion" ? "#9C27B0" : "#4CAF50"))); color: white;">
@@ -50,13 +50,12 @@
                                     <p class="mb-0">@item.Estado</p>
                                 </div>
                                 <div class="card-body text-center">
-                                    <p class="fw-bold mb-0">Camas: @item.Camas</p>
+                                    <p class="fw-bold my-3">Camas: @item.Camas</p>
                                 </div>
                                 <div class="card-footer text-center d-flex align-items-center gap-2">
                                     <a class="btn btn-secondary text-uppercase fw-bold font-xs" href="/personas">Ver</a>
-                                    <a class="btn btn-primary text-uppercase fw-bold font-xs" href="/habitacion/editar/@item.Id">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
+                                    <a class="btn btn-primary text-uppercase fw-bold font-xs" href="/habitacion/editar/@item.Id">Editar</a>
+                                    <button class="btn btn-danger text-uppercase fw-bold font-xs" @onclick="()=>Eliminar(item)">Eliminar</button>
                                 </div>
                             </div>
                         </div>
@@ -69,13 +68,10 @@
 
 @code {
 
-    [Inject]
-    private NavigationManager NavigationManager { get; set; }
-
     List<Habitacion> habitaciones;
-
     string Mensaje = "";
     bool Error;
+    Habitacion habitacionBorrar;
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,6 +92,19 @@
         {
             Mensaje = await respuesta.ObtenerError();
         }
+    }
+
+    private async Task Eliminar(Habitacion habBorrar)
+    {
+        habitacionBorrar = habBorrar;
+
+        var respuesta = await http.Delete($"api/Habitacion/{habitacionBorrar.Id}");
+        if (respuesta.Error)
+        {
+            var body = "Error, no se pudo borrar";
+        }
+        habitacionBorrar = null;
+        await Leer();
     }
 
     int habitacionesDisponibles;
@@ -124,8 +133,4 @@
             }
         }
     }
-    // private void NavegarAOtraPagina()
-    // {
-    //     NavigationManager.NavigateTo("/personas"); // Ruta a la otra página
-    // }
 }

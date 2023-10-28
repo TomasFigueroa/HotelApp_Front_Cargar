@@ -20,21 +20,19 @@
     <div class="form-group">
         <label class="mb-2 fw-bold color-primario">DNI de Huéspedes</label>
         <div class="mb-2">
+           
             @foreach (int dni in dniHuespedes)
             {
-           
-                <div class="input-group">
-                    <p>@dni</p>  
-                    <div class="input-group-append">
-                        <a class="btn btn-danger" @onclick="() => EliminarDni(dni)">Eliminar</a>
-                    </div>
+                <div class="d-flex justify-content-between my-1">
+                    <p class="mb-2">@dni</p>  
+                    <a class="btn btn-danger" @onclick="() => EliminarDni(dni)">Eliminar</a>
                 </div>
             }
 
             <div class="form-group">
                 <div class="input-group-append">
-                    <InputNumber class="form-control" @bind-Value="@dnis" />
-                    <a class="btn btn-success" @onclick="@(()=>AgregarDni(dnis))">Agregar otro DNI</a>
+                    <InputNumber class="form-control mt-2" @bind-Value="@dnis" max="2"/>
+                    <a class="btn btn-success mt-2" @onclick="@(()=>AgregarDni(dnis))">Agregar otro DNI</a>
                 </div>
             </div>
         </div>
@@ -58,10 +56,13 @@
 
     <div class="form-group ">
         <label class="mb-2 fw-bold color-primario">Numero de habitacion</label>
-        <div class="mb-3">
-            <InputNumber class="form-control" @bind-Value="@res.nhabs" />
-            <ValidationMessage For="@(() => res.nhabs)" />
-        </div>
+        <InputSelect class="form-control mb-4" @bind-Value="res.nhabs">
+            <option value="">Numero de Habitacion</option>
+            @foreach (var habitacion in habitaciones)
+            {
+                <option value="@habitacion.Nhab">@habitacion.Nhab</option>
+            }
+        </InputSelect>
     </div>
 
     <button class="btn btn-primary" type="submit" >Aceptar</button>
@@ -77,22 +78,41 @@
     [Parameter] public EventCallback onCancel { get; set; }
     [Parameter] public List<int> dniHuespedes { get; set; } = new List<int>();
     [Parameter] public List<int> nuevosDNIs { get; set; } = new List<int>();
-    //[Parameter] public DNI nd { get; set; }= new DNI();
     List<Reserva>? reservas;
+    List<Habitacion> habitaciones = new List<Habitacion>();
+    string Mensaje = "";
+    bool Error;
     int dnis;
     
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LeerHabs();
+    }
 
     private void AgregarDni(int addni)
     {
-        //NavigationManager.NavigateTo("/dniinput");
-      /*  dniHuespedes.Add(new());*/ // Agregar un nuevo campo en blanco.
         dniHuespedes.Add(addni);
-         // Reinicia el valor del nuevo DNI después de agregarlo
     }
 
     private void EliminarDni(int dni)
     {
         dniHuespedes.Remove(dni);
+    }
+
+    private async Task LeerHabs()
+    {
+        var respuesta = await http.Get<List<Habitacion>>("api/habitacion");
+        Error = respuesta.Error;
+
+        if (!respuesta.Error)
+        {
+            habitaciones = respuesta.Respuesta;
+        }
+        else
+        {
+            Mensaje = await respuesta.ObtenerError();
+        }
     }
 
 }

@@ -99,7 +99,8 @@ namespace HotelApp.Server.Controllers
             }
             return Ok(responseApi);
         }
-        [HttpDelete]
+     
+        [HttpDelete("{nroRes:int}")]
         public async Task<IActionResult> Borrar(int nroRes)
         {
             var responseApi = new ResponseAPI<int>();
