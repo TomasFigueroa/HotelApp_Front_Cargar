@@ -52,8 +52,8 @@
                                 <div class="card-body text-center">
                                     <p class="fw-bold my-3">Camas: @item.Camas</p>
                                 </div>
-                                <div class="card-footer text-center d-flex align-items-center gap-2">
-                                    <a class="btn btn-secondary text-uppercase fw-bold font-xs" href="/personas">Ver</a>
+                                <div class="card-footer text-center d-flex  justify-content-between">
+                                    <a class="btn btn-secondary text-uppercase fw-bold font-xs" href="/personas/@item.Nhab">Ver</a>
                                     <a class="btn btn-primary text-uppercase fw-bold font-xs" href="/habitacion/editar/@item.Id">Editar</a>
                                     <button class="btn btn-danger text-uppercase fw-bold font-xs" @onclick="()=>Eliminar(item)">Eliminar</button>
                                 </div>

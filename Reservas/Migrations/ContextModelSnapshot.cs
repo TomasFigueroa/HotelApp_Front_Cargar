@@ -103,6 +103,9 @@ namespace Reservas.BData.Migrations
                         .HasMaxLength(55)
                         .HasColumnType("nvarchar(55)");
 
+                    b.Property<int>("NumHab")
+                        .HasColumnType("int");
+
                     b.Property<string>("NumTarjeta")
                         .IsRequired()
                         .HasMaxLength(20)

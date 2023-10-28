@@ -1,4 +1,4 @@
-﻿@page "/crear/persona"
+﻿@page "/crear/persona/{idhabit:int}"
 @inject IHTTPServicio http
 @inject NavigationManager navigationManager
 
@@ -10,6 +10,7 @@
     </div>
 </div>
 @code {
+    [Parameter] public int idhabit { get; set; }
     private Persona persona = new Persona();
      
     private async Task Grabar()
@@ -21,7 +22,8 @@
                 Correo = persona.Correo,
                 Dni = persona.Dni,
                 Telefono = persona.Telefono,
-                NumTarjeta = persona.NumTarjeta
+                NumTarjeta = persona.NumTarjeta,
+                NumHab = idhabit
              
          };
 
@@ -32,13 +34,13 @@
             var body = HTTPRespueta.HttpResponseMessage;
         }
 
-        navigationManager.NavigateTo("/personas");
+        navigationManager.NavigateTo($"/personas/{idhabit}");
     }
 
 
     private void Cancelar()
     {
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo($"/personas/{idhabit}");
     }
 
 }

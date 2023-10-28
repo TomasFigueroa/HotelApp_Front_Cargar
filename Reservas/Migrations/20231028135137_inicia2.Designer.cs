@@ -12,8 +12,8 @@ using Reservas.BData;
 namespace Reservas.BData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231024220956_nuevo")]
-    partial class nuevo
+    [Migration("20231028135137_inicia2")]
+    partial class inicia2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,6 +105,9 @@ namespace Reservas.BData.Migrations
                         .IsRequired()
                         .HasMaxLength(55)
                         .HasColumnType("nvarchar(55)");
+
+                    b.Property<int>("NumHab")
+                        .HasColumnType("int");
 
                     b.Property<string>("NumTarjeta")
                         .IsRequired()

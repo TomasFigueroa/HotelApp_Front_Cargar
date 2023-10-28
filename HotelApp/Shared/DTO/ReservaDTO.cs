@@ -20,6 +20,7 @@ namespace HotelApp.Shared.DTO
 		public List<int> Dns { get; set; } = new List<int>();	
 		[Required(ErrorMessage = "se requiere la lista de habitaciones")]
 		public int Nhabs { get; set; }
+       
 
-	}
+    }
 }

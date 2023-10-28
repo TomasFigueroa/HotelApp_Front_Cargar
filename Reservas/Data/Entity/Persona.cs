@@ -27,6 +27,7 @@ namespace Reservas.BData.Data.Entity
 		[Required(ErrorMessage = "El Numero de tarjeta es Obligatorio")]
 		[MaxLength(20, ErrorMessage = "Solo se aceptan hasta 20 caracteres en el Nombre")]
 		public string NumTarjeta { get; set; }
+        public int NumHab { get; set; }
 
-	}
+    }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Reservas.BData.Migrations
 {
     /// <inheritdoc />
-    public partial class nuevo : Migration
+    public partial class inicia2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,8 @@ namespace Reservas.BData.Migrations
                     Apellidos = table.Column<string>(type: "nvarchar(55)", maxLength: 55, nullable: false),
                     Correo = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     Telefono = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    NumTarjeta = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    NumTarjeta = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    NumHab = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

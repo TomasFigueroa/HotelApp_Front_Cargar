@@ -38,7 +38,7 @@ namespace HotelApp.Server.Controllers
             return persona;
         }
 
-        [HttpGet("GetDniP/{dniPersona:int}")]
+        [HttpGet("GetDni/{dniPersona:int}")]
         public async Task<ActionResult<Persona>> GetDniPersona(int dniPersona)
         {
             var buscar = await context.Personas.FirstOrDefaultAsync(c => c.Dni == dniPersona);
@@ -70,7 +70,9 @@ namespace HotelApp.Server.Controllers
                     Apellidos = personaDTO.Apellidos,
                     Correo = personaDTO.Correo,
                     Telefono = personaDTO.Telefono,
-                    NumTarjeta = personaDTO.NumTarjeta
+                    NumTarjeta = personaDTO.NumTarjeta,
+                    NumHab = personaDTO.NumHab
+                    
 
                 };
                 context.Personas.Add(mdPersona);

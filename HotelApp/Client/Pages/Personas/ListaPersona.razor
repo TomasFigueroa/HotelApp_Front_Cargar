@@ -1,12 +1,12 @@
 ﻿@inject NavigationManager navigationManager;
-@page "/personas"
+@page "/personas/{idhabit:int}"
 @inject IHTTPServicio http
 <PageTitle>PERSONAS</PageTitle>
 
 <div class="bg-fondo vh-100 p-3 container overflow-auto">
 
     <div class="m-2">
-        <a class="btn btn-success d-inline-block mb-4 rounded" href="crear/persona"><i class="oi oi-person"></i> Crear Persona</a>
+        <a class="btn btn-success d-inline-block mb-4 rounded" href="crear/persona/@idhabit"><i class="oi oi-person"></i> Crear Persona</a>
     </div>
 
     <div class="container-fluid">
@@ -41,17 +41,21 @@
                         {
                             @foreach (var item in personas)
                             {
-                                <tr class="bg-white">
-                                    <td class="p-3 text-center text-dark-100 ">@item.Nombres</td>
-                                    <td class="p-3 text-center text-dark-100 ">@item.Apellidos</td>
-                                    <td class="p-3 text-center text-dark-100 ">@item.Dni</td>
-                                    <td class="p-3 text-center text-dark-100 "> @item.Correo</td>
-                                    <td class="p-3 text-center text-dark-100 ">@item.NumTarjeta</td>
-                                    <td class="p-3 d-flex justify-content-center align-items-center gap-2 ">
-                                        <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)"><i class="oi oi-trash"></i></button>
-                                        <button class="btn btn-primary d-inline-block" @onclick="()=>Editar(item.Id)"><i class="oi oi-pencil"></i></button>
-                                    </td>
-                                </tr>
+                                if (idhabit==item.NumHab)
+                                {
+                                    <tr class="bg-white">
+                                        <td class="p-3 text-center text-dark-100 ">@item.Nombres</td>
+                                        <td class="p-3 text-center text-dark-100 ">@item.Apellidos</td>
+                                        <td class="p-3 text-center text-dark-100 ">@item.Dni</td>
+                                        <td class="p-3 text-center text-dark-100 "> @item.Correo</td>
+                                        <td class="p-3 text-center text-dark-100 ">@item.NumTarjeta</td>
+                                        <td class="p-3 d-flex justify-content-center align-items-center gap-2 ">
+                                            <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)"><i class="oi oi-trash"></i></button>
+                                            <button class="btn btn-primary d-inline-block" @onclick="()=>Editar(item.Id)"><i class="oi oi-pencil"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                               
                             }
                         }
                     }
@@ -62,7 +66,7 @@
 </div>
 
 @code {
-  
+    [Parameter] public int idhabit { get; set; }
     Persona personaBorrar;
     List<Persona>? personas;
     bool Error = false;
