@@ -178,6 +178,10 @@
         if (!respuesta.Error)
         {
             huesped = respuesta.Respuesta;
+
+            // Limpia la lista actual y agrega el resultado de la búsqueda
+            huespedes.Clear();
+            huespedes.Add(huesped);
         }
         else
         {
@@ -189,5 +193,6 @@
     {
         dniBusqueda = 0;
         huesped = null;
+        await Leer(); // Vuelve a cargar la lista original de huéspedes
     }
 }
