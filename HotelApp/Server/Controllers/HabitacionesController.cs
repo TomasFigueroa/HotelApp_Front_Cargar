@@ -133,8 +133,8 @@ namespace HotelApp.Server.Controllers
         //    return Ok();
         //}
 
-        [HttpDelete]
 
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int Id)
         {
             var responseApi = new ResponseAPI<int>();

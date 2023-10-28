@@ -25,13 +25,13 @@
             };
 
         var HTTPRespueta = await http.Post<HuespedDTO>("api/Huesped", huespedDTO);
+        navigationManager.NavigateTo("/huespedes");
 
         if (HTTPRespueta.Error)
         {
             var body = HTTPRespueta.HttpResponseMessage;
         }
 
-        navigationManager.NavigateTo("/personas");
     }
 
     private void Cancelar()
