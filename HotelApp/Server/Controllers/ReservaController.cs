@@ -25,7 +25,7 @@ namespace HotelApp.Server.Controllers
         }
 
         [HttpGet("int:NroReserva")]
-        public async Task<ActionResult<Reserva>> GetDniPersona(int nroReserva)
+        public async Task<ActionResult<Reserva>> GetNroReserva(int nroReserva)
         {
             var buscar = await context.Reservas.FirstOrDefaultAsync(c => c.NroReserva == nroReserva);
 
@@ -64,7 +64,7 @@ namespace HotelApp.Server.Controllers
             }
             catch (Exception ex) { return BadRequest(ex.InnerException.Message); }
         }
-        [HttpPut]
+        [HttpPut("{nres:int}")]
         public async Task<IActionResult> Editar(ReservaDTO reservaDTO, int nres)
         {
             var responseApi = new ResponseAPI<int>();

@@ -1,5 +1,7 @@
 ﻿@page "/reserva"
 @inject IHTTPServicio http
+@inject NavigationManager navigationManager;
+
 <PageTitle>Reserva</PageTitle>
 
 <div class="bg-fondo vh-100 p-3 container overflow-auto">
@@ -53,9 +55,8 @@
                                     <td class="p-3 text-center text-dark-100"> @item.Fecha_fin</td>
                                     <td class="p-3 text-center text-dark-100">@item.nhabs</td>
                                     <td class="p-3 d-flex justify-content-center align-items-center gap-2 ">
-                                        <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)">
-                                            <i class="oi oi-trash"></i>
-                                        </button>
+                                        <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)"><i class="oi oi-trash"></i></button>
+                                        <button class="btn btn-primary d-inline-block" @onclick="()=>Editar(item.NroReserva)"><i class="oi oi-pencil"></i></button>
                                     </td>
                                 </tr>
                             }
@@ -106,4 +107,8 @@
         await Leer();
     }
 
+    private void Editar(int nroReserva)
+    {
+        navigationManager.NavigateTo($"/reservar/editar/{nroReserva}");
+    }
 }
