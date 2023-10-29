@@ -12,8 +12,8 @@ using Reservas.BData;
 namespace Reservas.BData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231028135137_inicia2")]
-    partial class inicia2
+    [Migration("20231029173031_BD")]
+    partial class BD
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

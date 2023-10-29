@@ -6,6 +6,10 @@
     <div class="container col-md-6">
         <div class="shadow p-4 bg-white">
             <FormReserva res="reserva" dniHuespedes="dniHuespedes" onValidSubbmit="Grabar" onCancel="Cancelar" />
+            @if (mostrarMensajeError)
+            {
+                <div class="alert alert-danger">@mensajeError</div>
+            }
         </div>
     </div>
 </div>
@@ -14,11 +18,15 @@
 
     private List<int> dniHuespedes = new List<int>();
     private Reserva reserva = new Reserva();
+    private int persdni = 0;
+    private bool mostrarMensajeError = false;
+    private string mensajeError = "";
 
 
     private async Task Grabar()
     {
-
+        try
+        {
         ReservaDTO reservaDTO = new()
                 {
                     NroReserva = reserva.NroReserva,
@@ -27,18 +35,46 @@
                     Fecha_inicio = reserva.Fecha_inicio,
                     Nhabs = reserva.nhabs,
                     Dns= dniHuespedes
-                   
-                };
-        
-        var HTTPRespueta = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
 
-            if (HTTPRespueta.Error)
+                };
+        persdni = reserva.Dni;  
+        var httpPers = await http.GetCod<Persona>($"api/Persona/GetDni/{persdni}");
+
+        // Verificar si httpPers es nulo
+        if (httpPers == null)
+        {
+            mostrarMensajeError = true;
+            mensajeError = "No se encontró la persona con el DNI especificado.";
+            return;
+        }
+        httpPers.Respuesta.NumHab = reservaDTO.Nhabs;
+        foreach (var dni in dniHuespedes)
+        {
+            var personaHuesped = await http.Get<Huesped>($"api/Huesped/GetDni/{dni}");
+            if (personaHuesped == null)
             {
-                var body = HTTPRespueta.HttpResponseMessage;
+                mostrarMensajeError = true;
+                mensajeError = $"El DNI {dni} de un huésped no existe en la base de datos.";
+                return;
+            }
+        }
+        var HTTPRespueta = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
+        var respuesta = await http.Put<Persona>($"api/Persona/{httpPers.Respuesta.Id}", httpPers.Respuesta);
+        if (HTTPRespueta.Error )
+        {
+            mostrarMensajeError = true;
+            mensajeError = $"no pudo realizarse la reserva o cargo un dni de persona invalido";
+            return;
+            var body = HTTPRespueta.HttpResponseMessage;
         }
         else { navigationManager.NavigateTo("/reserva"); }
-
         }
+        catch (Exception ex)
+        {
+            mostrarMensajeError = true;
+            mensajeError = "Se produjo un error inesperado: " + ex.Message;
+        }
+    }
     private void Cancelar()
     {
         navigationManager.NavigateTo("/");

@@ -41,6 +41,7 @@ namespace Reservas.BData
 				o.Property(b => b.Correo);
 				o.Property(b => b.Telefono);
 				o.Property(b => b.NumTarjeta);
+				o.Property(b => b.NumHab);
 			});
 			modelBuilder.Entity<Huesped>(o =>
 			{

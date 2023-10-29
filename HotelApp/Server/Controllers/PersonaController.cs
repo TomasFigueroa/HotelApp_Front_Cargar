@@ -97,6 +97,7 @@ namespace HotelApp.Server.Controllers
                     dbPersona.Correo = personaDTO.Correo;
                     dbPersona.Telefono = personaDTO.Telefono;
                     dbPersona.NumTarjeta = personaDTO.NumTarjeta;
+                    dbPersona.NumHab = personaDTO.NumHab;
                     context.Personas.Update(dbPersona);
                     await context.SaveChangesAsync();
                     responseApi.EsCorrecto = true;
