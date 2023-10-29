@@ -19,8 +19,8 @@ namespace Reservas.BData.Data.Entity
 		[MaxLength(55, ErrorMessage = "Solo se aceptan hasta 55 caracteres en el Nombre")]
 		public string Apellidos { get; set; }
 		[Required(ErrorMessage = "El Correo es Obligatorio")]
-		[MaxLength(45, ErrorMessage = "Solo se aceptan hasta 45 caracteres en el Nombre")]
-		public string Correo { get; set; }
+        [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
+        public string Correo { get; set; }
 		[Required(ErrorMessage = "El Telefono es Obligatorio")]
 		[MaxLength(20, ErrorMessage = "Solo se aceptan hasta 20 caracteres en el Nombre")]
 		public string Telefono { get; set; }

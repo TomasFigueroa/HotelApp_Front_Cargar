@@ -27,47 +27,79 @@
     {
         try
         {
-        ReservaDTO reservaDTO = new()
+            bool reservaValida = true; // Inicialmente, consideramos que la reserva es válida
+            ReservaDTO reservaDTO = new()
                 {
                     NroReserva = reserva.NroReserva,
                     Dni = reserva.Dni,
                     Fecha_fin = reserva.Fecha_fin,
                     Fecha_inicio = reserva.Fecha_inicio,
                     Nhabs = reserva.nhabs,
-                    Dns= dniHuespedes
-
+                    Dns = dniHuespedes
                 };
-        persdni = reserva.Dni;  
-        var httpPers = await http.GetCod<Persona>($"api/Persona/GetDni/{persdni}");
 
-        // Verificar si httpPers es nulo
-        if (httpPers == null)
-        {
-            mostrarMensajeError = true;
-            mensajeError = "No se encontró la persona con el DNI especificado.";
-            return;
-        }
-        httpPers.Respuesta.NumHab = reservaDTO.Nhabs;
-        foreach (var dni in dniHuespedes)
-        {
-            var personaHuesped = await http.Get<Huesped>($"api/Huesped/GetDni/{dni}");
-            if (personaHuesped == null)
+            persdni = reserva.Dni;
+            var httpPers = await http.GetCod<Persona>($"api/Persona/GetDni/{persdni}");
+
+            // Verificar si httpPers es nulo
+            if (httpPers == null)
             {
                 mostrarMensajeError = true;
-                mensajeError = $"El DNI {dni} de un huésped no existe en la base de datos.";
-                return;
+                mensajeError = "No se encontró la persona con el DNI especificado.";
+                reservaValida = false; // Marcar la reserva como no válida
             }
-        }
-        var HTTPRespueta = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
-        var respuesta = await http.Put<Persona>($"api/Persona/{httpPers.Respuesta.Id}", httpPers.Respuesta);
-        if (HTTPRespueta.Error )
-        {
-            mostrarMensajeError = true;
-            mensajeError = $"no pudo realizarse la reserva o cargo un dni de persona invalido";
-            return;
-            var body = HTTPRespueta.HttpResponseMessage;
-        }
-        else { navigationManager.NavigateTo("/reserva"); }
+
+            // Verificar si Respuesta de httpPers es nulo
+            if (httpPers.Respuesta == null)
+            {
+                mostrarMensajeError = true;
+                mensajeError = "El DNI que ingresaste no corresponde a una persona en el sistema.";
+                reservaValida = false; // Marcar la reserva como no válida
+            }
+
+            httpPers.Respuesta.NumHab = reservaDTO.Nhabs;
+
+            foreach (var dni in dniHuespedes)
+            {
+                var personaHuesped = await http.Get<Huesped>($"api/Huesped/GetDni/{dni}");
+                if (personaHuesped.Respuesta == null)
+                {
+                    mostrarMensajeError = true;
+                    mensajeError = $"El DNI {dni} de un huésped no existe en la base de datos.";
+                    reservaValida = false; // Marcar la reserva como no válida
+                    break; // Terminar la verificación de DNIs si uno es inválido
+                }
+            }
+
+            Console.WriteLine(reservaValida);
+            if (reservaValida == true)
+            {
+                var HTTPResponse = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
+
+                if (HTTPResponse.Error)
+                {
+                    mostrarMensajeError = true;
+                    mensajeError = "No se pudo realizar la reserva o se ingresó un DNI de persona inválido.";
+                    return;
+                }
+
+                var respuesta = await http.Put<Persona>($"api/Persona/{httpPers.Respuesta.Id}", httpPers.Respuesta);
+
+                if (respuesta.Error)
+                {
+                    mostrarMensajeError = true;
+                    mensajeError = "No se pudo actualizar la información de la persona.";
+                    return;
+                }
+
+                navigationManager.NavigateTo("/reserva");
+            }
+            else
+            {
+                mostrarMensajeError = true;
+                mensajeError = "Se produjo un error inesperado, verifique los datos cargados y que concuerden con los cargados previamente ";
+            }
+            
         }
         catch (Exception ex)
         {
@@ -75,6 +107,8 @@
             mensajeError = "Se produjo un error inesperado: " + ex.Message;
         }
     }
+
+
     private void Cancelar()
     {
         navigationManager.NavigateTo("/");
