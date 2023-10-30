@@ -4,32 +4,47 @@
 
 <PageTitle>Ver Reserva</PageTitle>
 
-<div class="bg-fondo vh-100 p-3 container overflow-auto">
-    <div class="container">
+<style>
+    .custom-card {
+        background: #F5F5F5;
+        border: 2px solid #3498db;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .guest-card {
+        background: #fff;
+        border: 2px solid #3498db;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="custom-card">
         @if (reserva != null)
         {
-            <div class="border border-primary p-3">
-                <h4 class="text-primary">Detalles de la Reserva</h4>
-                <div>
-                    <strong>Código Reserva:</strong> @reserva.NroReserva <br />
-                    <strong>Número de Habitación:</strong> @reserva.nhabs <br />
-                    <strong>Nombre de la Persona que hizo la reserva:</strong> @persona.Nombres @persona.Apellidos <br />
-                    <strong>DNI de la Persona que hizo la reserva:</strong> @persona.Dni <br />
-                    <strong>Fecha de Reserva:</strong> Desde @reserva.Fecha_inicio.ToShortDateString() hasta @reserva.Fecha_fin.ToShortDateString() <br />
-                </div>
-                <div>
-                    <strong>Huéspedes:</strong>
-                    @if (huespedes != null)
+            <h4 class="text-primary">Detalles de la Reserva</h4>
+            <div>
+                <strong>Código Reserva:</strong> @reserva.NroReserva <br />
+                <strong>Número de Habitación:</strong> @reserva.nhabs <br />
+                <strong>Nombre de la Persona que hizo la reserva:</strong> @persona.Nombres @persona.Apellidos <br />
+                <strong>DNI de la Persona que hizo la reserva:</strong> @persona.Dni <br />
+                <strong>Fecha de Reserva:</strong> Desde @reserva.Fecha_inicio.ToShortDateString() hasta @reserva.Fecha_fin.ToShortDateString() <br />
+            </div>
+            <div>
+                <strong>Huéspedes:</strong>
+                @if (huespedes != null)
+                {
+                    @foreach (var huesped in huespedes)
                     {
-                        @foreach (var huesped in huespedes)
-                        {
-                            <div>
-                                <strong>Nombre del Huésped:</strong> @huesped.Nombres @huesped.Apellidos <br />
-                                <strong>DNI del Huésped:</strong> @huesped.Dni <br />
-                            </div>
-                        }
+                        <div class="guest-card">
+                            <strong>Nombre del Huésped:</strong> @huesped.Nombres @huesped.Apellidos <br />
+                            <strong>DNI del Huésped:</strong> @huesped.Dni <br />
+                        </div>
                     }
-                </div>
+                }
             </div>
         }
         else
