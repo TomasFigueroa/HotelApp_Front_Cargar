@@ -57,6 +57,7 @@
                                     <td class="p-3 d-flex justify-content-center align-items-center gap-2 ">
                                         <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)"><i class="oi oi-trash"></i></button>
                                         <button class="btn btn-primary d-inline-block" @onclick="()=>Editar(item.Id)"><i class="oi oi-pencil"></i></button>
+                                        <button class="btn btn-info d-inline-block mr-1" @onclick="()=>Ver(item.Id)"><i class="oi oi-eye text-white"></i></button>
                                     </td>
                                 </tr>
                             }
@@ -105,6 +106,11 @@
         }
         reservaBorrar = null;
         await Leer();
+    }
+
+    private void Ver(int id)
+    {
+        navigationManager.NavigateTo($"/reservar/ver/{id}");
     }
 
     private void Editar(int id)

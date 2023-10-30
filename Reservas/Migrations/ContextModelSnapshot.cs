@@ -92,8 +92,7 @@ namespace Reservas.BData.Migrations
 
                     b.Property<string>("Correo")
                         .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Dni")
                         .HasColumnType("int");

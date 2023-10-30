@@ -52,7 +52,7 @@ namespace Reservas.BData.Migrations
                     Dni = table.Column<int>(type: "int", nullable: false),
                     Nombres = table.Column<string>(type: "nvarchar(55)", maxLength: 55, nullable: false),
                     Apellidos = table.Column<string>(type: "nvarchar(55)", maxLength: 55, nullable: false),
-                    Correo = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Telefono = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     NumTarjeta = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     NumHab = table.Column<int>(type: "int", nullable: false)

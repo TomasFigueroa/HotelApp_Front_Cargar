@@ -12,7 +12,7 @@ using Reservas.BData;
 namespace Reservas.BData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231029173031_BD")]
+    [Migration("20231030122048_BD")]
     partial class BD
     {
         /// <inheritdoc />
@@ -95,8 +95,7 @@ namespace Reservas.BData.Migrations
 
                     b.Property<string>("Correo")
                         .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Dni")
                         .HasColumnType("int");
