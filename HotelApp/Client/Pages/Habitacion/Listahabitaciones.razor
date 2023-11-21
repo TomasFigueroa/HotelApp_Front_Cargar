@@ -1,5 +1,6 @@
 ﻿@inject IHTTPServicio http
 
+
 <PageTitle>Gestion Hotel</PageTitle>
 
 <div class="bg-fondo vh-100 p-3 container overflow-auto">
@@ -7,18 +8,25 @@
         <a href="/crear" class="btn btn-success text-uppercase fw-bold shadow-sm">
             <i class="bi bi-plus"></i> + Habitación
         </a>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Disponibles:
-             <span class="text-success fw-bold">@habitacionesDisponibles</span>
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
+            Disponibles:
+            <span class="text-success fw-bold">@habitacionesDisponibles</span>
         </button>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Ocupadas: 
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
+            Ocupadas:
             <span class="text-danger fw-bold">@habitacionesNoDisponibles</span>
         </button>
-        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">Reparación:
+        <button type="button" class="btn btn-light text-uppercase fw-bold shadow-sm">
+            Reparación:
             <span class="color-lila fw-bold">@habitacionesEnMantenimiento</span>
         </button>
     </div>
     <div class="container">
         <div class="row">
+            <div class="container mt-4">
+                <label for="fechaReserva">Seleccionar fecha de reserva:</label>
+                <InputDate id="fechaReserva" @bind-Value="fechaSeleccionada" onchange="@ActualizarHabitaciones" />
+            </div>
 
             @if (Error)
             {
@@ -72,25 +80,63 @@
     string Mensaje = "";
     bool Error;
     Habitacion habitacionBorrar;
+    DateTime fechaSeleccionada = DateTime.Today;
+    int habitacionesDisponibles;
+    int habitacionesNoDisponibles;
+    int habitacionesEnMantenimiento;
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         await Leer();
-        OnInitialized();
     }
     private async Task Leer()
     {
-        var respuesta = await http.Get<List<Habitacion>>("api/Habitacion");
-        Error = respuesta.Error;
+        var habitacionesRespuesta = await http.Get<List<Habitacion>>("api/Habitacion");
+        Error = habitacionesRespuesta.Error;
 
-        if (!respuesta.Error)
+        if (!Error)
         {
-            habitaciones = respuesta.Respuesta;
+            habitaciones = habitacionesRespuesta.Respuesta;
+
+            var reservasRespuesta = await http.Get<List<Reserva>>("api/Reservar");
+            if (reservasRespuesta.Error)
+            {
+                Mensaje = await reservasRespuesta.ObtenerError();
+                return;
+            }
+
+            var reservas = reservasRespuesta.Respuesta;
+
+            habitacionesDisponibles = 0;
+            habitacionesNoDisponibles = 0;
+            habitacionesEnMantenimiento = 0;
+
+            foreach (var habitacion in habitaciones)
+            {
+                if (habitacion.Estado != "reparacion")
+                {
+                    var reserva = reservas.FirstOrDefault(r =>
+                        r.nhabs == habitacion.Nhab &&
+                        fechaSeleccionada.Date >= r.Fecha_inicio.Date &&
+                        fechaSeleccionada.Date <= r.Fecha_fin.Date
+                    );
+
+                    habitacion.Estado = reserva != null ? "ocupada" : "disponible";
+
+                    if (habitacion.Estado == "disponible")
+                        habitacionesDisponibles++;
+                    else if (habitacion.Estado == "ocupada")
+                        habitacionesNoDisponibles++;
+                    else if (habitacion.Estado == "reparacion")
+                        habitacionesEnMantenimiento++;
+                }
+            }
+
+            StateHasChanged(); // Forzar la actualización de la interfaz de usuario
         }
         else
         {
-            Mensaje = await respuesta.ObtenerError();
+            Mensaje = await habitacionesRespuesta.ObtenerError();
         }
     }
 
@@ -107,30 +153,10 @@
         await Leer();
     }
 
-    int habitacionesDisponibles;
-    int habitacionesNoDisponibles;
-    int habitacionesEnMantenimiento;
-
-    private void OnInitialized()
+    private async Task ActualizarHabitaciones()
     {
-        habitacionesDisponibles = 0;
-        habitacionesNoDisponibles = 0;
-        habitacionesEnMantenimiento = 0;
-
-        foreach (var habitacion in habitaciones)
-        {
-            if (habitacion.Estado == "disponible")
-            {
-                habitacionesDisponibles++;
-            }
-            else if (habitacion.Estado == "ocupada")
-            {
-                habitacionesNoDisponibles++;
-            }
-            else if (habitacion.Estado == "reparacion")
-            {
-                habitacionesEnMantenimiento++;
-            }
-        }
+        await Leer();
+        StateHasChanged(); // Asegurarse de que Blazor vuelva a renderizar la página después de la actualización
     }
+
 }

@@ -13,6 +13,5 @@ namespace HotelApp.Shared.DTO
 		public int Camas { get; set; }
 		public string? Estado { get; set; }
 
-
 	}
 }
