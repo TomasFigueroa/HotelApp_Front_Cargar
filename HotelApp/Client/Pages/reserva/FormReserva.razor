@@ -122,9 +122,8 @@
                 habitaciones = habitaciones.Where(habitacion =>
                     habitacion.Estado != "reparacion" &&
                     !reservas.Any(reserva =>
-                    reserva.nhabs == habitacion.Nhab &&
-                    (res.Fecha_inicio.Date < reserva.Fecha_fin.Date && res.Fecha_fin.Date > reserva.Fecha_inicio.Date)
-                )
+                reserva.nhabs == habitacion.Nhab &&
+                (res.Fecha_inicio.Date < reserva.Fecha_fin.Date && res.Fecha_fin.Date > reserva.Fecha_inicio.Date))
             ).ToList();
             }
             else
