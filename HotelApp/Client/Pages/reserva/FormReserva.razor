@@ -20,18 +20,18 @@
     <div class="form-group">
         <label class="mb-2 fw-bold color-primario">DNI de Huéspedes</label>
         <div class="mb-2">
-           
+
             @foreach (int dni in dniHuespedes)
             {
                 <div class="d-flex justify-content-between my-1">
-                    <p class="mb-2">@dni</p>  
+                    <p class="mb-2">@dni</p>
                     <a class="btn btn-danger" @onclick="() => EliminarDni(dni)">Eliminar</a>
                 </div>
             }
 
             <div class="form-group">
                 <div class="input-group-append">
-                    <InputNumber class="form-control mt-2" @bind-Value="@dnis" max="2"/>
+                    <InputNumber class="form-control mt-2" @bind-Value="@dnis" max="2" />
                     <a class="btn btn-success mt-2" @onclick="@(()=>AgregarDni(dnis))">Agregar otro DNI</a>
                 </div>
             </div>
@@ -41,7 +41,7 @@
     <div class="form-group">
         <label class="mb-2 fw-bold color-primario">Fecha inicio</label>
         <div class="mb-2">
-            <InputDate class="form-control" @bind-Value="@res.Fecha_inicio" onchange="@LeerHabs()" />
+            <InputDate class="form-control" @bind-Value="@res.Fecha_inicio" @oninput="@(() => LeerHabs())" />
             <ValidationMessage For="@(() => res.Fecha_inicio)" />
         </div>
     </div>
@@ -49,7 +49,7 @@
     <div class="form-group ">
         <label class="mb-2 fw-bold color-primario">Fecha Fin</label>
         <div class="mb-2">
-            <InputDate class="form-control" @bind-Value="@res.Fecha_fin" onchange="@LeerHabs()" />
+            <InputDate class="form-control" @bind-Value="@res.Fecha_fin" @oninput="@(() => LeerHabs())" />
             <ValidationMessage For="@(() => res.Fecha_fin)" />
         </div>
     </div>
@@ -65,14 +65,14 @@
         </InputSelect>
     </div>
 
-    <button class="btn btn-primary" type="submit" >Aceptar</button>
+    <button class="btn btn-primary" type="submit">Aceptar</button>
     <button class="btn btn-secondary" @onclick="onCancel">Cancelar</button>
 </EditForm>
 
 
 
 @code {
-    
+
     [Parameter] public Reserva res { get; set; } = new Reserva();
     [Parameter] public EventCallback onValidSubbmit { get; set; }
     [Parameter] public EventCallback onCancel { get; set; }
@@ -83,10 +83,12 @@
     string Mensaje = "";
     bool Error;
     int dnis;
-    
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        res.Fecha_inicio = DateTime.Today;
+        res.Fecha_fin = DateTime.Today;
         await LeerHabs();
     }
 
@@ -116,16 +118,13 @@
             {
                 habitaciones = respuestaHabitaciones.Respuesta;
 
-                // Filtrar habitaciones que no tienen reservas durante el período especificado
+                // Filtrar habitaciones que no tienen reservas que se superponen con el período especificado
                 habitaciones = habitaciones.Where(habitacion =>
-                habitacion.Estado != "reparacion" &&
-                !reservas.Any(reserva =>
-                    reserva.nhabs == habitacion.Nhab &&
-                    res.Fecha_inicio.Date >= reserva.Fecha_inicio.Date &&
-                    res.Fecha_inicio.Date <= reserva.Fecha_fin.Date ||
-                    res.Fecha_fin.Date >= reserva.Fecha_inicio.Date &&
-                    res.Fecha_fin.Date <= reserva.Fecha_fin.Date
-                )
+                    habitacion.Estado != "reparacion" &&
+                    !reservas.Any(reserva =>
+                        reserva.nhabs == habitacion.Nhab &&
+                        (res.Fecha_inicio.Date < reserva.Fecha_fin.Date && res.Fecha_fin.Date > reserva.Fecha_inicio.Date)
+                    )
                 ).ToList();
             }
             else

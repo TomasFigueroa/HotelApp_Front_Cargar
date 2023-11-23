@@ -1,6 +1,7 @@
 ﻿@page "/crear/reserva"
 @inject IHTTPServicio http
 @inject NavigationManager navigationManager
+@using MatBlazor
 
 <div class="p-4">
     <div class="container col-md-6">
@@ -21,7 +22,7 @@
     private int persdni = 0;
     private bool mostrarMensajeError = false;
     private string mensajeError = "";
-
+    
 
     private async Task Grabar()
     {
