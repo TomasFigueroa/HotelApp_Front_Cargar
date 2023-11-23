@@ -56,7 +56,7 @@
 
     <div class="form-group ">
         <label class="mb-2 fw-bold color-primario">Numero de habitacion</label>
-        <InputSelect class="form-control mb-4" @bind-Value="res.nhabs">
+        <InputSelect class="form-control mb-4" @bind-Value="res.nhabs" key="@(res.Fecha_inicio.ToString("yyyyMMdd") + res.Fecha_fin.ToString("yyyyMMdd"))">
             <option value="">Numero de Habitacion</option>
             @foreach (var habitacion in habsDisponibles)
             {
@@ -64,6 +64,7 @@
             }
         </InputSelect>
     </div>
+
 
     <button class="btn btn-primary" type="submit">Aceptar</button>
     <button class="btn btn-secondary" @onclick="onCancel">Cancelar</button>
@@ -126,7 +127,6 @@
         reserva.nhabs == habitacion.Nhab &&
         (res.Fecha_inicio.Date < reserva.Fecha_fin.Date && res.Fecha_fin.Date >= reserva.Fecha_inicio.Date))
     ).ToList();
-                StateHasChanged();
             }
             else
             {
