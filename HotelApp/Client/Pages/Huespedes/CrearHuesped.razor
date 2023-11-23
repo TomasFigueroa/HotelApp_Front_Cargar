@@ -25,7 +25,7 @@
             };
 
         var HTTPRespueta = await http.Post<HuespedDTO>("api/Huesped", huespedDTO);
-        navigationManager.NavigateTo("/crear/reserva");
+        navigationManager.NavigateTo("/huespedes");
 
         if (HTTPRespueta.Error)
         {

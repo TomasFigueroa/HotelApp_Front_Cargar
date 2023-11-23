@@ -25,7 +25,7 @@
         <div class="row">
             <div class="container mt-4">
                 <label for="fechaReserva">Seleccionar fecha de reserva:</label>
-                <InputDate id="fechaReserva" @bind-Value="fechaSeleccionada" onchange="@ActualizarHabitaciones" />
+                <InputDate id="fechaReserva" @bind-Value="fechaSeleccionada" onchange="@(async () => await ActualizarHabitaciones())" />
             </div>
 
             @if (Error)
@@ -132,12 +132,12 @@
                 }
             }
 
-            StateHasChanged(); // Forzar la actualización de la interfaz de usuario
         }
         else
         {
             Mensaje = await habitacionesRespuesta.ObtenerError();
         }
+        
     }
 
     private async Task Eliminar(Habitacion habBorrar)
@@ -152,11 +152,15 @@
         habitacionBorrar = null;
         await Leer();
     }
-
+    DateTime fechaAnterior; // Variable para almacenar la fecha anterior
     private async Task ActualizarHabitaciones()
     {
-        await Leer();
-        StateHasChanged(); // Asegurarse de que Blazor vuelva a renderizar la página después de la actualización
+        if (fechaSeleccionada != fechaAnterior)
+        {
+            fechaAnterior = fechaSeleccionada;
+            await Leer();
+        }
+        
     }
 
 }
