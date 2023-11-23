@@ -58,7 +58,7 @@
         <label class="mb-2 fw-bold color-primario">Numero de habitacion</label>
         <InputSelect class="form-control mb-4" @bind-Value="res.nhabs">
             <option value="">Numero de Habitacion</option>
-            @foreach (var habitacion in habitaciones)
+            @foreach (var habitacion in habsDisponibles)
             {
                 <option value="@habitacion.Nhab">@habitacion.Nhab</option>
             }
@@ -80,6 +80,7 @@
     [Parameter] public List<int> nuevosDNIs { get; set; } = new List<int>();
     List<Reserva>? reservas;
     List<Habitacion> habitaciones = new List<Habitacion>();
+    List<Habitacion> habsDisponibles = new List<Habitacion>();
     string Mensaje = "";
     bool Error;
     int dnis;
@@ -106,7 +107,7 @@
     {
         var respuestaReservas = await http.Get<List<Reserva>>("api/Reservar");
         Error = respuestaReservas.Error;
-
+        habsDisponibles.Clear();
         if (!Error)
         {
             var reservas = respuestaReservas.Respuesta;
@@ -119,12 +120,13 @@
                 habitaciones = respuestaHabitaciones.Respuesta;
 
                 // Filtrar habitaciones que no tienen reservas que se superponen con el período especificado
-                habitaciones = habitaciones.Where(habitacion =>
-                    habitacion.Estado != "reparacion" &&
-                    !reservas.Any(reserva =>
-                reserva.nhabs == habitacion.Nhab &&
-                (res.Fecha_inicio.Date < reserva.Fecha_fin.Date && res.Fecha_fin.Date > reserva.Fecha_inicio.Date))
-            ).ToList();
+                habsDisponibles = habitaciones.Where(habitacion =>
+        habitacion.Estado != "reparacion" &&
+        !reservas.Any(reserva =>
+        reserva.nhabs == habitacion.Nhab &&
+        (res.Fecha_inicio.Date < reserva.Fecha_fin.Date && res.Fecha_fin.Date >= reserva.Fecha_inicio.Date))
+    ).ToList();
+                StateHasChanged();
             }
             else
             {
