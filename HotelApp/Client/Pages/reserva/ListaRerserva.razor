@@ -4,20 +4,24 @@
 
 <PageTitle>Reserva</PageTitle>
 
+
 <div class="bg-fondo vh-100 p-3 container overflow-auto">
     <a class="btn btn-success rounded mb-4 m-2" href="/crear/reserva"><i class="oi oi-document"></i> Crear Reserva</a>
-    
+    <p>
+        <MatTextField @bind-Value="@codigoBusqueda" Label="Buscar por Código" @oninput="BuscarPorCodigo"></MatTextField>
+    </p>
     <div class="container-fluid">
         <div class="table-responsive">
-            <table class="table table-hover table-striped shadow bg-white" >
+            <table class="table table-hover table-striped shadow bg-white">
                 <thead class="bg-primary text-white text-center fw-bolder">
                     <tr>
-                        <th scope="col" >DNI</th>
-                        <th scope="col" >Dni Huesped</th>
-                        <th scope="col" >Fecha Inicio</th>
-                        <th scope="col" >Fecha FIN</th>
-                        <th scope="col" >Habitacion</th>
-                        <th scope="col" >Accion</th>
+                        <th scope="col">Código Reserva</th>
+                        <th scope="col">DNI</th>
+                        <th scope="col">Dni Huesped</th>
+                        <th scope="col">Fecha Inicio</th>
+                        <th scope="col">Fecha FIN</th>
+                        <th scope="col">Habitacion</th>
+                        <th scope="col">Accion</th>
                     </tr>
                 </thead>
 
@@ -38,10 +42,11 @@
                         }
                         else
                         {
-                            @foreach (var item in reservas)
+                            @foreach (var item in reservas.Where(r => string.IsNullOrEmpty(codigoBusqueda) || r.NroReserva.ToString().Contains(codigoBusqueda)))
                             {
                                 <tr>
-                                    <td class="p-3 text-center text-dark-100 ">@item.Dni</td>
+                                    <td class="p-3 text-center text-dark-100">@item.NroReserva</td>
+                                    <td class="p-3 text-center text-dark-100">@item.Dni</td>
                                     <td>
                                         <InputSelect class="form-control p-2 text-center text-dark-100" id="Estado" @bind-Value="@item.DniHuesped">
                                             <option class="text-center" disabled selected>DNI de Huéspedes</option>
@@ -50,9 +55,9 @@
                                                 <option disabled>@dni</option>
                                             }
                                         </InputSelect>
-                                    </td>                                        
+                                    </td>
                                     <td class="p-3 text-center text-dark-100">@item.Fecha_inicio</td>
-                                    <td class="p-3 text-center text-dark-100"> @item.Fecha_fin</td>
+                                    <td class="p-3 text-center text-dark-100">@item.Fecha_fin</td>
                                     <td class="p-3 text-center text-dark-100">@item.nhabs</td>
                                     <td class="p-3 d-flex justify-content-center align-items-center gap-2 ">
                                         <button class="btn btn-danger d-inline-block mr-1" @onclick="()=>Eliminar(item)"><i class="oi oi-trash"></i></button>
@@ -70,7 +75,7 @@
 </div>
 
 @code {
-
+    string codigoBusqueda = "";
     Reserva reservaBorrar;
     List<Reserva>? reservas;
     bool Error = false;
@@ -95,6 +100,7 @@
             Mensaje = await respuesta.ObtenerError();
         }
     }
+
     private async Task Eliminar(Reserva reserBorr)
     {
         reservaBorrar = reserBorr;
@@ -116,5 +122,11 @@
     private void Editar(int id)
     {
         navigationManager.NavigateTo($"/reservar/editar/{id}");
+    }
+
+    private async Task BuscarPorCodigo(ChangeEventArgs e)
+    {
+        codigoBusqueda = e.Value.ToString();
+        await Leer();
     }
 }

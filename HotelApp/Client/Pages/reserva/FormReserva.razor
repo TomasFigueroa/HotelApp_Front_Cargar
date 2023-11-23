@@ -49,7 +49,7 @@
     <div class="form-group ">
         <label class="mb-2 fw-bold color-primario">Fecha Fin</label>
         <div class="mb-2">
-            <InputDate class="form-control" @bind-Value="@res.Fecha_fin" />
+            <InputDate class="form-control" @bind-Value="@res.Fecha_fin" onchange="@LeerHabs()" />
             <ValidationMessage For="@(() => res.Fecha_fin)" />
         </div>
     </div>
@@ -102,16 +102,40 @@
 
     private async Task LeerHabs()
     {
-        var respuesta = await http.Get<List<Habitacion>>("api/habitacion");
-        Error = respuesta.Error;
+        var respuestaReservas = await http.Get<List<Reserva>>("api/Reservar");
+        Error = respuestaReservas.Error;
 
-        if (!respuesta.Error)
+        if (!Error)
         {
-            habitaciones = respuesta.Respuesta;
+            var reservas = respuestaReservas.Respuesta;
+
+            var respuestaHabitaciones = await http.Get<List<Habitacion>>("api/Habitacion");
+            Error = respuestaHabitaciones.Error;
+
+            if (!Error)
+            {
+                habitaciones = respuestaHabitaciones.Respuesta;
+
+                // Filtrar habitaciones que no tienen reservas durante el período especificado
+                habitaciones = habitaciones.Where(habitacion =>
+                habitacion.Estado != "reparacion" &&
+                !reservas.Any(reserva =>
+                    reserva.nhabs == habitacion.Nhab &&
+                    res.Fecha_inicio.Date >= reserva.Fecha_inicio.Date &&
+                    res.Fecha_inicio.Date <= reserva.Fecha_fin.Date ||
+                    res.Fecha_fin.Date >= reserva.Fecha_inicio.Date &&
+                    res.Fecha_fin.Date <= reserva.Fecha_fin.Date
+                )
+                ).ToList();
+            }
+            else
+            {
+                Mensaje = await respuestaHabitaciones.ObtenerError();
+            }
         }
         else
         {
-            Mensaje = await respuesta.ObtenerError();
+            Mensaje = await respuestaReservas.ObtenerError();
         }
     }
 

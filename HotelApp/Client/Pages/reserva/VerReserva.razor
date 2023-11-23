@@ -29,23 +29,27 @@
             <div>
                 <strong>Código Reserva:</strong> @reserva.NroReserva <br />
                 <strong>Número de Habitación:</strong> @reserva.nhabs <br />
-                <strong>Nombre de la Persona que hizo la reserva:</strong> @persona.Nombres @persona.Apellidos <br />
-                <strong>DNI de la Persona que hizo la reserva:</strong> @persona.Dni <br />
-                <strong>Correo de la persona: </strong> @persona.Correo<br>
-                <strong>Numero de tarjeta: </strong> @persona.NumTarjeta<br>
+                <strong>DNI de la Persona que hizo la reserva:</strong> @persona?.Dni <br />
+                <strong>Nombre de la Persona que hizo la reserva:</strong> @persona?.Nombres @persona?.Apellidos <br />
+                <strong>Correo de la persona: </strong> @persona?.Correo<br>
+                <strong>Numero de tarjeta: </strong> @persona?.NumTarjeta<br>
                 <strong>Fecha de Reserva:</strong> Desde @reserva.Fecha_inicio.ToShortDateString() hasta @reserva.Fecha_fin.ToShortDateString() <br />
             </div>
             <div>
                 <strong>Huéspedes:</strong>
-                @if (huespedes != null)
+                @if (huespedes != null && huespedes.Any())
                 {
                     @foreach (var huesped in huespedes)
                     {
                         <div class="guest-card">
-                            <strong>Nombre del Huésped:</strong> @huesped.Nombres @huesped.Apellidos <br />
-                            <strong>DNI del Huésped:</strong> @huesped.Dni <br />
+                            <strong>Nombre del Huésped:</strong> @huesped?.Nombres @huesped?.Apellidos <br />
+                            <strong>DNI del Huésped:</strong> @huesped?.Dni <br />
                         </div>
                     }
+                }
+                else
+                {
+                    <p class="text-warning">No se han registrado huéspedes aún.</p>
                 }
             </div>
         }
@@ -72,20 +76,14 @@
             // Buscar la persona por su DNI
             var respuestaPersona = await http.Get<Persona>($"api/Persona/GetDni/{reserva.Dni}");
 
-            if (!respuestaPersona.Error)
-            {
-                persona = respuestaPersona.Respuesta;
-            }
+            persona = respuestaPersona?.Error == false ? respuestaPersona.Respuesta : new Persona { Dni = reserva.Dni, Nombres = "No cargado aun, debe hacer el check-in" };
 
             // Cargar la lista de huéspedes
             huespedes = new List<Huesped>();
             foreach (var dniHuesped in reserva.DniHuesped)
             {
                 var respuestaHuesped = await http.Get<Huesped>($"api/Huesped/GetDni/{dniHuesped}");
-                if (!respuestaHuesped.Error)
-                {
-                    huespedes.Add(respuestaHuesped.Respuesta);
-                }
+                huespedes.Add(respuestaHuesped?.Error == false ? respuestaHuesped.Respuesta : new Huesped { Dni = dniHuesped, Nombres = "No cargado aun, debe hacer el check-in" });
             }
         }
     }

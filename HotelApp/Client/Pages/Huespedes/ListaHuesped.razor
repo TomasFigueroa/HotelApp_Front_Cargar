@@ -175,7 +175,7 @@
         var huesped = huespedes.FirstOrDefault(h => h.Id == id);
         if (huesped != null)
         {
-            huesped.Checkin = true;
+            huesped.Checkin = !huesped.Checkin;
 
             // Realiza una solicitud PUT al controlador para actualizar el checkin
             var respuesta = await http.Put<Huesped>($"api/huesped/{id}", huesped);
