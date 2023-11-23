@@ -41,7 +41,7 @@
     <div class="form-group">
         <label class="mb-2 fw-bold color-primario">Fecha inicio</label>
         <div class="mb-2">
-            <InputDate class="form-control" @bind-Value="@res.Fecha_inicio" />
+            <InputDate class="form-control" @bind-Value="@res.Fecha_inicio" onchange="@LeerHabs()" />
             <ValidationMessage For="@(() => res.Fecha_inicio)" />
         </div>
     </div>
