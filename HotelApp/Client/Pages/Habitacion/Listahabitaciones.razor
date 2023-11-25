@@ -23,8 +23,8 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="container mt-4">
-                <label for="fechaReserva">Seleccionar fecha de reserva:</label>
+            <div class="container my-4 d-flex gap-3 align-items-center">
+                <label for="fechaReserva" class="fw-bold">Filtrar reserva por fecha:</label>
                 <InputDate id="fechaReserva" @bind-Value="fechaSeleccionada" onchange="@ActualizarHabitaciones()" />
             </div>
 

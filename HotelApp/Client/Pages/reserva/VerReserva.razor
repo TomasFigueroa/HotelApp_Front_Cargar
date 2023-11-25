@@ -4,23 +4,6 @@
 
 <PageTitle>Ver Reserva</PageTitle>
 
-<style>
-    .custom-card {
-        background: #F5F5F5;
-        border: 2px solid #3498db;
-        border-radius: 10px;
-        padding: 20px;
-    }
-
-    .guest-card {
-        background: #fff;
-        border: 2px solid #3498db;
-        border-radius: 10px;
-        padding: 20px;
-        margin-top: 10px;
-    }
-</style>
-
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="custom-card">
         @if (reserva != null)
@@ -29,9 +12,9 @@
             <div>
                 <strong>Código Reserva:</strong> @reserva.NroReserva <br />
                 <strong>Número de Habitación:</strong> @reserva.nhabs <br />
-                <strong>DNI de la Persona que hizo la reserva:</strong> @persona?.Dni <br />
-                <strong>Nombre de la Persona que hizo la reserva:</strong> @persona?.Nombres @persona?.Apellidos <br />
-                <strong>Correo de la persona: </strong> @persona?.Correo<br>
+                <strong>DNI Titular de reserva:</strong> @persona?.Dni <br />
+                <strong>Nombre Titular de reserva:</strong> @persona?.Nombres @persona?.Apellidos <br />
+                <strong>Correo Electrónco: </strong> @persona?.Correo<br>
                 <strong>Numero de tarjeta: </strong> @persona?.NumTarjeta<br>
                 <strong>Fecha de Reserva:</strong> Desde @reserva.Fecha_inicio.ToShortDateString() hasta @reserva.Fecha_fin.ToShortDateString() <br />
             </div>

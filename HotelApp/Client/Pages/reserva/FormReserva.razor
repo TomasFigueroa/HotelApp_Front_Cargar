@@ -71,7 +71,6 @@
 </EditForm>
 
 
-
 @code {
 
     [Parameter] public Reserva res { get; set; } = new Reserva();
@@ -121,12 +120,11 @@
                 habitaciones = respuestaHabitaciones.Respuesta;
 
                 // Filtrar habitaciones que no tienen reservas que se superponen con el período especificado
-                habsDisponibles = habitaciones.Where(habitacion =>
-        habitacion.Estado != "reparacion" &&
-        !reservas.Any(reserva =>
-        reserva.nhabs == habitacion.Nhab &&
-        (res.Fecha_inicio.Date < reserva.Fecha_fin.Date && res.Fecha_fin.Date >= reserva.Fecha_inicio.Date))
-    ).ToList();
+                habsDisponibles = habitaciones.Where(
+                    habitacion => habitacion.Estado != "reparacion" 
+                    &&!reservas.Any(reserva => reserva.nhabs == habitacion.Nhab 
+                    &&(res.Fecha_inicio.Date < reserva.Fecha_fin.Date 
+                    && res.Fecha_fin.Date >= reserva.Fecha_inicio.Date))).ToList();
             }
             else
             {
@@ -138,5 +136,4 @@
             Mensaje = await respuestaReservas.ObtenerError();
         }
     }
-
 }

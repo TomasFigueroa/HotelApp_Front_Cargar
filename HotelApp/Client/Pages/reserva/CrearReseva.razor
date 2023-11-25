@@ -4,9 +4,9 @@
 @using MatBlazor
 
 <div class="p-4">
-    <div class="container col-md-6">
-        <div class="shadow p-4 bg-white">
-            <FormReserva res="reserva" dniHuespedes="dniHuespedes" onValidSubbmit="Grabar" onCancel="Cancelar" />
+    <div class="container col-md-6 ">
+        <div class="shadow p-4 bg-white ">
+            <FormReserva res="reserva"  dniHuespedes="dniHuespedes" onValidSubbmit="Grabar" onCancel="Cancelar" />
             @if (mostrarMensajeError)
             {
                 <div class="alert alert-danger">@mensajeError</div>

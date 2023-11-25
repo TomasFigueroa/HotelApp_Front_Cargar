@@ -9,16 +9,17 @@
     <meta name="description" content="Listado de Huespedes" />
 </HeadContent>
 
-<link rel="stylesheet" href="css/ListaHuesped.css" /> <!-- Ruta al archivo CSS -->
 <div class="bg-fondo vh-100 p-3 container overflow-auto">
     <div class="m-2">
-        <a class="btn btn-success d-inline-block mb-4 rounded" href="crear/huesped"><i class="order-0 oi-person"></i>Crear Huesped
+        <a class="btn btn-success d-inline-block mb-4 rounded" href="crear/huesped"><i class="order-0 oi oi-person"></i> Crear Huesped
         </a>
     </div>
+    <div class="container-fluid">
+
     <div class="mb-3">
         <label class="mb-2 fw-bold color-primario">Buscar por DNI:</label>
         <div class=" d-flex justify-content-between">
-            <InputNumber type="text" class="w-75" @bind-Value="dniBusqueda" />
+            <InputNumber type="text" class="w-50" @bind-Value="dniBusqueda" />
             <button class="btn btn-primary" @onclick="BuscarPorDNI">Buscar</button>
                 @if (huesped != null)
                 {
@@ -26,7 +27,6 @@
                 }
         </div>
     </div>
-    <div class="container-fluid">
         <div class="table-responsive">
             <table class="table table-hover table-striped shadow" style="width: 100%;">
                 <thead class="bg-primary text-white text-center fw-bolder">
@@ -34,7 +34,7 @@
                         <th scope="col">Nombre Completo</th>
                         <th scope="col">DNI</th>
                         <th scope="col">Checkin</th>
-                        <th scope="col">DNI Persona</th>
+                        <th scope="col">DNI Titular</th>
                         <th scope="col">Acción</th>
                     </tr>
                 </thead>

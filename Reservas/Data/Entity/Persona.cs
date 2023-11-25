@@ -11,7 +11,7 @@ namespace Reservas.BData.Data.Entity
 	{
 		public int Id { get; set; }
 		[Required]
-		public int Dni { get; set; }
+        public int Dni { get; set; }
 		[Required(ErrorMessage = "El Nombre es Obligatorio")]
 		[MaxLength(55, ErrorMessage = "Solo se aceptan hasta 55 caracteres en el Nombre")]
 		public string Nombres { get; set; }

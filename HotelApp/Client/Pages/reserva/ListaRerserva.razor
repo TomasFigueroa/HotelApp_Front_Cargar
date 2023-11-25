@@ -8,11 +8,13 @@
 
 
 <div class="bg-fondo vh-100 p-3 container overflow-auto">
+    
     <a class="btn btn-success rounded mb-4 m-2" href="/crear/reserva"><i class="oi oi-document"></i> Crear Reserva</a>
-    <p>
-        <MatTextField @bind-Value="@codigoBusqueda" Label="Buscar por Código" @oninput="BuscarPorCodigo"></MatTextField>
-    </p>
+    
     <div class="container-fluid">
+        
+        <MatTextField Class="mb-4" @bind-Value="@codigoBusqueda" Label="Buscar por Código" @oninput="BuscarPorCodigo"></MatTextField>
+        
         <div class="table-responsive">
             <table class="table table-hover table-striped shadow bg-white">
                 <thead class="bg-primary text-white text-center fw-bolder">
