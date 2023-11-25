@@ -14,6 +14,16 @@
         </div>
     </div>
 </div>
+<MatDialog @bind-IsOpen="@mostrarModalError" Style="z-index: 1050;">
+    <MatDialogTitle>¡Error!</MatDialogTitle>
+    <MatDialogContent>
+        <p>Debe ingresar al menos 1 DNI de huésped.</p>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@CerrarModal">Cerrar</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
 
 @code {
 
@@ -22,47 +32,60 @@
     private int persdni = 0;
     private bool mostrarMensajeError = false;
     private string mensajeError = "";
-    
+    private bool mostrarModalError = false;
 
     private async Task Grabar()
     {
-        try
+        if (dniHuespedes.Count() < 1)
         {
-            bool reservaValida = true; // Inicialmente, consideramos que la reserva es válida
-            ReservaDTO reservaDTO = new()
-                {
-                    NroReserva = reserva.NroReserva,
-                    Dni = reserva.Dni,
-                    Fecha_fin = reserva.Fecha_fin,
-                    Fecha_inicio = reserva.Fecha_inicio,
-                    Nhabs = reserva.nhabs,
-                    Dns = dniHuespedes
-                };
-
-            Console.WriteLine(reservaValida);
-            if (reservaValida == true)
+            mostrarModalError = true;
+        }
+        else
+        {
+            try
             {
-                var HTTPResponse = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
-                navigationManager.NavigateTo("/reserva");
+                bool reservaValida = true; // Inicialmente, consideramos que la reserva es válida
+                ReservaDTO reservaDTO = new()
+                    {
+                        NroReserva = reserva.NroReserva,
+                        Dni = reserva.Dni,
+                        Fecha_fin = reserva.Fecha_fin,
+                        Fecha_inicio = reserva.Fecha_inicio,
+                        Nhabs = reserva.nhabs,
+                        Dns = dniHuespedes
+                    };
+
+                Console.WriteLine(reservaValida);
+                if (reservaValida == true)
+                {
+                    var HTTPResponse = await http.Post<ReservaDTO>("api/Reservar", reservaDTO);
+                    navigationManager.NavigateTo("/reserva");
+                }
+                else
+                {
+                    mostrarMensajeError = true;
+                    mensajeError = "Se produjo un error inesperado, verifique los datos cargados y que concuerden con los cargados previamente ";
+                }
+
             }
-            else
+            catch (Exception ex)
             {
                 mostrarMensajeError = true;
-                mensajeError = "Se produjo un error inesperado, verifique los datos cargados y que concuerden con los cargados previamente ";
+                mensajeError = "Se produjo un error inesperado: " + ex.Message;
             }
-            
         }
-        catch (Exception ex)
-        {
-            mostrarMensajeError = true;
-            mensajeError = "Se produjo un error inesperado: " + ex.Message;
-        }
+        
     }
 
 
     private void Cancelar()
     {
         navigationManager.NavigateTo("/");
+    }
+
+    private void CerrarModal()
+    {
+        mostrarModalError = false;
     }
 
 }
