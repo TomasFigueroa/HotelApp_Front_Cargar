@@ -1,5 +1,5 @@
 ﻿@inject IHTTPServicio http
-
+@inject NavigationManager navigationManager
 
 <PageTitle>Gestion Hotel</PageTitle>
 
@@ -61,7 +61,7 @@
                                     <p class="fw-bold my-3">Camas: @item.Camas</p>
                                 </div>
                                 <div class="card-footer text-center d-flex  justify-content-between">
-                                    <a class="btn btn-secondary text-uppercase fw-bold font-xs" href="/personas/@item.Nhab">Ver</a>
+                                    <a class="btn btn-secondary" @onclick="() => IrAPersonas(item.Nhab)">Ver</a>
                                     <a class="btn btn-primary text-uppercase fw-bold font-xs" href="/habitacion/editar/@item.Id">Editar</a>
                                     <button class="btn btn-danger text-uppercase fw-bold font-xs" @onclick="()=>Eliminar(item)">Eliminar</button>
                                 </div>
@@ -84,6 +84,7 @@
     int habitacionesDisponibles;
     int habitacionesNoDisponibles;
     int habitacionesEnMantenimiento;
+    private int numHab; 
 
     protected override async Task OnInitializedAsync()
     {
@@ -161,5 +162,8 @@
             StateHasChanged();
         }
     }
-
+    private void IrAPersonas(int numhabit)
+    {
+        navigationManager.NavigateTo($"/personas/{numhabit}");
+    }
 }

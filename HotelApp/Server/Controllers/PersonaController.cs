@@ -50,6 +50,18 @@ namespace HotelApp.Server.Controllers
 
             return buscar;
         }
+        [HttpGet("GetNumHab/{NumHab:int}")]
+        public async Task<ActionResult<List<Persona>>> GetNumHab(int numhab)
+        {
+            var buscar = await context.Personas.Where(c => c.NumHab == numhab).ToListAsync();
+
+            if (buscar.Count ==0)
+            {
+                return BadRequest($"No se encontro la Persona de numero de habitacion: {numhab}");
+            }
+
+            return buscar;
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post(PersonaDTO personaDTO)

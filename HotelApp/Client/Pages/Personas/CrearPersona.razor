@@ -1,4 +1,4 @@
-﻿@page "/crear/persona"
+﻿@page "/crear/persona/{NumHab:int}"
 @inject IHTTPServicio http
 @inject NavigationManager navigationManager
 
@@ -10,9 +10,9 @@
     </div>
 </div>
 @code {
-    [Parameter] public int idhabit { get; set; }
+    [Parameter]public int NumHab { get; set; }
     private Persona persona = new Persona();
-     
+
     private async Task Grabar()
     {
         PersonaDTO personaDTO = new()
@@ -23,9 +23,9 @@
                 Dni = persona.Dni,
                 Telefono = persona.Telefono,
                 NumTarjeta = persona.NumTarjeta,
-                NumHab = idhabit
-             
+
          };
+        personaDTO.NumHab = NumHab;
 
         var HTTPRespueta = await http.Post<PersonaDTO>("api/Persona", personaDTO);
 
@@ -34,13 +34,13 @@
             var body = HTTPRespueta.HttpResponseMessage;
         }
 
-        navigationManager.NavigateTo($"/personas/{idhabit:int}");
+        navigationManager.NavigateTo($" / ");
     }
 
 
     private void Cancelar()
     {
-        navigationManager.NavigateTo($"/personas/{idhabit}");
+        navigationManager.NavigateTo($"/");
     }
 
 }
