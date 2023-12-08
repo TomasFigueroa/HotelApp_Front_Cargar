@@ -128,10 +128,11 @@
                         habitacionesDisponibles++;
                     else if (habitacion.Estado == "ocupada")
                         habitacionesNoDisponibles++;
-                    else if (habitacion.Estado == "reparacion")
-                        habitacionesEnMantenimiento++;
                 }
+                if (habitacion.Estado == "reparacion")
+                    habitacionesEnMantenimiento++;
             }
+            Console.WriteLine(habitacionesEnMantenimiento);
         }
         else
         {
